@@ -93,3 +93,4 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 .idea/workspace.xml
+.idea/test_pycharm.iml
