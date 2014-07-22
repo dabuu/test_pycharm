@@ -54,3 +54,15 @@ for x in t[1:]:
 print "============= t[1:-1]";
 for x in t[1:-1]:
     print x;
+
+
+print "==================== test kwargs ====================";
+
+def printkwargs(**kwargs):
+    i = 1;
+    for key, value in kwargs.iteritems():
+        print "%d: %s == %s" % (i, key, value);
+        i += 1;
+
+
+printkwargs(firstname="wang", lastname="yue");
