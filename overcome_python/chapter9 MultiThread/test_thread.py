@@ -17,6 +17,7 @@ t1.start();
 
 print "==================== 创建thread的新类，通过 start 创建线程，之后执行 run 的方法 ====================";
 
+
 class MyThread(threading.Thread):
     def __init__(self, num):
         threading.Thread.__init__(self);
@@ -30,3 +31,14 @@ mt2 = MyThread(2);
 
 mt1.start();
 mt2.start();
+
+print "==================== thread类 相关的方法 ====================";
+
+test_thread = MyThread(2);
+
+test_thread.start();
+print test_thread.isAlive();    # thread is alive
+print test_thread.getName();    # thread name
+test_thread.join();             # join
+for i in range(1,5,1):
+    print i;

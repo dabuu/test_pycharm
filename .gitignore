@@ -95,3 +95,4 @@ $RECYCLE.BIN/
 .idea/workspace.xml
 .idea/test_pycharm.iml
 .idea
+.idea/modules.xml
