@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>有奖问答</title>
+    <script language="javascript" type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+	<style type="text/css">
+		li input[type="radio"]{
+				display:none;
+		}
+		
+		input[type="radio"] + label
+		{
+			background: url("unchecked.png");
+			height: 19px;
+			width: 19px;
+			display:inline-block;
+			margin-right: 10px;
+		}
+
+		input[type="radio"]:checked + label
+		{
+			background: url("checked.png");
+			height: 19px;
+			width: 19px;
+			display:inline-block;
+			margin-right: 10px;
+		}
+
+	</style>
+</head>
+<body>
+	<p>
+		<a id="test" href="#">知道更多</a>
+	</p>
+	<form name="questions">
+	    <div style="border: 1px solid black;margin-top: 10px;">
+	        <div style="border-bottom: 1px solid red; padding: 10px;">
+	            <label>测试题 A</label>
+	        </div>
+	        <p style="margin: 10px;">题目是xXXXXXXXXXXXXXX</p>
+	        <ul id="ul1" style="list-style: none">
+	            <li><input type="radio" value="1" id="A1" name="A"/><label for="A1"></label>A111</li>
+	            <li><input type="radio" value="2" id="A2" name="A"/><label for="A2"></label>A222</li>
+	            <li><input type="radio" value="3" id="A3" name="A"/><label for="A3"></label>A333</li>
+	            <li><input type="radio" value="4" id="A4" name="A"/><label for="A4"></label>A444</li>
+	        </ul>
+	        <div align="center">
+	        <input type="button" name="fa_A" value="去找答案>>"/>
+	            </div>
+	    </div>
+	    <div style="border: 1px solid black;margin-top: 10px;">
+	        <div style="border-bottom: 1px solid red; padding: 10px;">
+	            <label>测试题 B</label>
+	        </div>
+	        <p style="margin: 10px;">题目是xXXXXXXXXXXXXXX</p>
+	        <ul style="list-style: none">
+	            <li><input type="radio" value="1" id="B1" name="B"/><label for="B1"></label>B111</li>
+	            <li><input type="radio" value="2" id="B2" name="B"/><label for="B2"></label>B222</li>
+	            <li><input type="radio" value="3" id="B3" name="B"/><label for="B3"></label>B333</li>
+	            <li><input type="radio" value="4" id="B4" name="B"/><label for="B4"></label>B444</li>
+	        </ul>
+	        <div align="center">
+	        <input type="button" name="fa_B" value="去找答案>>"/>
+	            </div>
+	    </div>
+	    <input type="button" value="提交答案" name="submitanswer" id="submitanswer" style="width: 100%;" disabled="disabled"/>
+    </form>
+    <SCRIPT type="text/javascript">
+    	$(document).ready(function(){
+    		var A_checked = false, B_checked = false;
+    		$("input:radio[name=A]").click(function(){
+    			A_checked = true;
+    			issubmitenable();
+    		});
+    		
+    		$("input:radio[name=B]").click(function(){
+    			B_checked = true;
+    			issubmitenable();
+    		});
+    		
+    		$("input#submitanswer").click(function(){
+    			alert($("form:first").serialize());
+    			return false;
+    		});
+    		
+    		function issubmitenable(){
+    			if(A_checked && B_checked){
+    				//$("input[name=submitanswer]").css("color","red");
+    				$("input[name=submitanswer]").removeAttr("disabled");
+    			}
+    		};
+    		
+    	});
+    </SCRIPT>
+    
+</body>
+</html>
