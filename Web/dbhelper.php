@@ -13,8 +13,18 @@ define("USER", "test");
 define("PWD", "1qaz");
 define("DB", "test");
 
-// user operation query
+define("LatestID","SELECT @@IDENTITY ;");
+/*
+ *  User Operation in DB
+ */
+define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
+define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`) VALUES ('%s');");
 
+/*
+ *  Questions Operation in DB
+ */
+
+// user operation query
 class dbhelper {
     public $mysqli = null;
     function __construct()
@@ -27,6 +37,7 @@ class dbhelper {
      */
     function QueryUserID($user_id)
     {
+        $this->$mysqli->query()
         return 0;
         // return $this->InsertUser($user_id);
     }
