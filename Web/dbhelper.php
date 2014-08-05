@@ -29,7 +29,7 @@ class dbhelper {
     public $mysqli = null;
     function __construct()
     {
-        $this->$mysqli = new mysqli(HOST, USER, PWD, DB);
+        $this->mysqli = new \mysqli(HOST, USER, PWD, DB);
     }
 
     /*
@@ -37,12 +37,25 @@ class dbhelper {
      */
     function QueryUserID($user_id)
     {
-        $this->$mysqli->query()
-        return 0;
+        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id));
+        if($result->num_rows)
+        {
+            $temp_id = $result->fetch_array()[0];
+            if(is_numeric($temp_id))
+            {
+                return $temp_id;
+            }
+            else{
+                //todo: log to warning;
+            }
+        }
+
+        return  InsertUser($user_id);
         // return $this->InsertUser($user_id);
     }
     private function InsertUser($user_id)
     {
+        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id).);
         return 0;
     }
 
