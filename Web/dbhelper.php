@@ -49,18 +49,27 @@ class dbhelper {
                 //todo: log to warning;
             }
         }
-
         return  InsertUser($user_id);
         // return $this->InsertUser($user_id);
     }
     private function InsertUser($user_id)
     {
-        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id).);
-        return 0;
+        $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id)); // insert a new user
+        $result = $this->mysqli->query(LatestID);
+        return $result->fetch_array()[0];
     }
 
     /*
      *  Questions Operation in DB
      */
+    function GenerateQuestions($num){
 
+    }
+/*
+SELECT *
+FROM `tbl_test` AS t1 JOIN (
+SELECT ROUND(RAND() * ((SELECT MAX(`t_id`) FROM `tbl_test`)-(SELECT MIN(`t_id`) FROM `tbl_test`))+(SELECT MIN(`t_id`) FROM `tbl_test`)) AS id
+from `tbl_test` limit 50) AS t2 on t1.`t_id`=t2.id
+ORDER BY t1.`t_id` LIMIT 4;
+*/
 } 
