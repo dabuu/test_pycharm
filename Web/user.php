@@ -10,31 +10,24 @@ namespace sf_wx_questions;
 include "dbhelper.php";
 
 class user {
-    private $wx_user_id;
+    private $wx_user_id, $mysql_helper;
+    /*
+     * @var int
+     */
     public  $user_db_id;
     function __construct($wx_user_id)
     {
+        $this->mysql_helper = new dbhelper();
+        $this->user_db_id = $this->mysql_helper->QueryUserID($wx_user_id);
+
         $this->wx_user_id = $wx_user_id;
     }
 
-    private function GetUserID()
-    {
-        // query in DB:  $this->wx_user_id
-        // return User
-        // if new user
-        return $this->InsertNewUser();; // return
-    }
-
-    private function InsertNewUser()
-    {
-        // insert into DB: $this->wx_user_id
-        return 0; // insert success return user_id in DB. otherwise, return 0;
-    }
 
     function HasAnswerQuestionToday()
     {
         // query in DB, whether the user had answered the questions
-        return true;
+        return $this->mysql_helper->HasAnswerQuestionToday($this->user_db_id);
     }
 
 

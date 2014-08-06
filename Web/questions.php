@@ -11,23 +11,25 @@ include "dbhelper.php";
 
 class questions {
 
+    public $today_questions_array = null;
+    private $mysql_helper;
+
     function __construct($num)
     {
+        $this->mysql_helper = new dbhelper();
         $this->Generate_Questions($num);
     }
-
-    public $today_questions_sql_result = null;
 
     private function Generate_Questions($question_num){
         // insert assigned num questions in table
         // & get the results object
-        $this->$today_questions_sql_result = null;
+        $this->today_questions_array = $this->mysql_helper->GetTodayQuestions(); // return an array of class question
     }
 
-    function CheckAnswers($array_answers, $user_id){
-        // insert answers into db
-        // $this->$today_questions_sql_result;
-
-        return 0;// return result; correct answer count
-    }
+//    function CheckAnswers($array_answers, $user_id){
+//        // insert answers into db
+//        // $this->$today_questions_sql_result;
+//
+//        return 0;// return result; correct answer count
+//    }
 } 
