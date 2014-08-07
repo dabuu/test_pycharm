@@ -24,7 +24,7 @@ class question {
 
     private function GetOptionsFromStyle()
     {
-        $q_options = explode("{#$}",$this->db_rst_row['q_options']);
+        $this->q_options = explode("{#$}",$this->db_rst_row['q_options']);
     }
 
 

@@ -8,10 +8,11 @@
 
 namespace sf_wx_questions;
 
-define("HOST", "localhost");
-define("USER", "test");
-define("PWD", "1qaz");
-define("DB", "test");
+define("HOST", SAE_MYSQL_HOST_M);
+define("USER", SAE_MYSQL_USER);
+define("PWD", SAE_MYSQL_PASS);
+define("DB", SAE_MYSQL_DB);
+define("PORT", SAE_MYSQL_PORT);
 
 define("LatestID","SELECT @@IDENTITY ;");
 /*
@@ -28,14 +29,14 @@ define("GetQuestionsRandomlyAsNum", "SELECT * FROM `app_dabuu`.`t_questions` LIM
 define("GetTodayQuestionsDateTime","SELECT `t_questions_today`.`qt_id`,`t_questions`.*  FROM `t_questions_today` LEFT JOIN `t_questions` ON `t_questions`.`q_id` = `t_questions_today`.`f_question_id`
 WHERE DATE(`t_questions_today`.`qt_date`) = DATE(now()) ");
 define("GenerateTodayQuestions_TPL","INSERT INTO `app_dabuu`.`t_questions_today` (`f_question_id`) VALUES %s;"); // here %s could be "(2),(3),(4)"
-define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`) VALUES ( %d, %d,%d);");
+define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`) VALUES %s;"); // here %s could be ( %d, %d,%d)
 
 // user operation query
 class dbhelper {
     public $mysqli = null;
     function __construct()
     {
-        $this->mysqli = new \mysqli(HOST, USER, PWD, DB);
+        $this->mysqli = new \mysqli(HOST, USER, PWD, DB, PORT);
     }
 
     /*
@@ -43,8 +44,10 @@ class dbhelper {
      */
     function HasAnswerQuestionToday($u_db_id)
     {
+        echo sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id);
         $rst_user_answer_count = $this->mysqli->query(sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id));
-        return ($rst_user_answer_count->fetch_array()[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
+        $answer_count = $rst_user_answer_count->fetch_array();
+        return ($answer_count[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
     }
 
 
@@ -53,7 +56,8 @@ class dbhelper {
         $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id));
         if($result->num_rows)
         {
-            $temp_id = $result->fetch_array()[0];
+            $result_temp_id = $result->fetch_array();
+            $temp_id = $result_temp_id[0];
             if(is_numeric($temp_id))
             {
                 $result->free();
@@ -69,7 +73,8 @@ class dbhelper {
     {
         $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id)); // insert a new user
         $result = $this->mysqli->query(LatestID);
-        return $result->fetch_array()[0];
+        $result_user = $result->fetch_array();
+        return $result_user[0];
     }
 
     /*
@@ -119,11 +124,11 @@ class dbhelper {
         return $this->mysqli->errno;
     }
 
-/*
-SELECT *
-FROM `tbl_test` AS t1 JOIN (
-SELECT ROUND(RAND() * ((SELECT MAX(`t_id`) FROM `tbl_test`)-(SELECT MIN(`t_id`) FROM `tbl_test`))+(SELECT MIN(`t_id`) FROM `tbl_test`)) AS id
-from `tbl_test` limit 50) AS t2 on t1.`t_id`=t2.id
-ORDER BY t1.`t_id` LIMIT 4;
-*/
+    /*
+    SELECT *
+    FROM `tbl_test` AS t1 JOIN (
+    SELECT ROUND(RAND() * ((SELECT MAX(`t_id`) FROM `tbl_test`)-(SELECT MIN(`t_id`) FROM `tbl_test`))+(SELECT MIN(`t_id`) FROM `tbl_test`)) AS id
+    from `tbl_test` limit 50) AS t2 on t1.`t_id`=t2.id
+    ORDER BY t1.`t_id` LIMIT 4;
+    */
 } 
