@@ -46,7 +46,11 @@ include "header.html";
     .q_container ul{
         list-style: none;
     }
-    .q_container ul li input{
+    .q_container ul li{
+        margin-left: -20px;
+        margin-bottom: 5px;
+    }
+    .q_container ul li label{
         margin-right: 10px;
     }
     input[type="radio"]{
@@ -68,6 +72,11 @@ include "header.html";
         width: 16px;
         display:inline-block;
         padding: 0 0 0 0;
+    }
+    #submitanswer{
+        width: 100%;
+        height: 40px;
+        font-size: 20px;
     }
 </style>
 <form name="questions" method="post" action="checkanswers.html">
@@ -100,7 +109,7 @@ include "header.html";
         exit;
     }
     ?>
-    <input type="button" value="提交答案" name="submitanswer" id="submitanswer" style="width: 100%;" disabled="disabled"/>
+    <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
     <input type="hidden" value="<?php echo $answers_str;?>" name="answers" />
 </form>
 <SCRIPT type="text/javascript">

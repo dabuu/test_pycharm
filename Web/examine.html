@@ -29,6 +29,10 @@
         .q_container ul{
             list-style: none;
         }
+        .q_container ul li{
+            margin-left: -20px;
+            margin-bottom: 5px;
+        }
         .q_container ul li label{
             margin-right: 10px;
         }
@@ -51,6 +55,11 @@
             width: 16px;
             display:inline-block;
             padding: 0 0 0 0;
+        }
+        #submitanswer{
+            width: 100%;
+            height: 40px;
+            font-size: 20px;
         }
     </style>
 	<form name="questions" method="post" action="checkanswers.html">
@@ -84,7 +93,7 @@
 	            <input type="button" name="fa_B" value="去找答案>>"/>
 	        </div>
 	    </div>
-	    <input type="button" value="提交答案" name="submitanswer" id="submitanswer" style="width: 100%;" disabled="disabled"/>
+	    <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
     </form>
     <SCRIPT type="text/javascript">
     	$(document).ready(function(){

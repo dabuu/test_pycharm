@@ -14,7 +14,7 @@ if(!isset($_POST['answers']) || empty($_POST['answers']))
     exit;
 }
 
-
+// todo: user has answered questions, refresh or back, post the form again.
 
 //$answers_array = array();
 $user_id = 0;
