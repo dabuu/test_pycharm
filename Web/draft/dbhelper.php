@@ -44,7 +44,6 @@ class dbhelper {
      */
     function HasAnswerQuestionToday($u_db_id)
     {
-        echo sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id);
         $rst_user_answer_count = $this->mysqli->query(sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id));
         $answer_count = $rst_user_answer_count->fetch_array();
         return ($answer_count[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
@@ -71,7 +70,7 @@ class dbhelper {
     }
     private function InsertUser($user_id)
     {
-        $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id)); // insert a new user
+        $this->mysqli->query(sprintf(InsertUserWXId, $user_id)); // insert a new user
         $result = $this->mysqli->query(LatestID);
         $result_user = $result->fetch_array();
         return $result_user[0];

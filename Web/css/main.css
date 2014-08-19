@@ -1,0 +1,49 @@
+body{
+    font-size: 16px;
+}
+.q_container{
+    border: 1px dotted black;
+    margin-top: 10px;
+}
+.q_title{
+    border-bottom: 1px solid red;
+    padding: 10px;
+}
+.q_container p{
+    margin: 10px;
+}
+.q_container ul{
+    list-style: none;
+}
+.q_container ul li{
+    margin-left: -20px;
+    margin-bottom: 5px;
+}
+.q_container ul li label{
+    margin-right: 10px;
+}
+input[type="radio"]{
+    display:none;
+}
+input[type="radio"] + label
+{
+    background: url("../images/unchecked.png");
+    height: 16px;
+    width: 16px;
+    display:inline-block;
+    padding: 0 0 0 0;
+}
+
+input[type="radio"]:checked + label
+{
+    background: url("../images/checked.png");
+    height: 16px;
+    width: 16px;
+    display:inline-block;
+    padding: 0 0 0 0;
+}
+#submitanswer{
+    width: 100%;
+    height: 40px;
+    font-size: 20px;
+}

@@ -29,7 +29,5 @@ class user {
         // query in DB, whether the user had answered the questions
         return $this->mysql_helper->HasAnswerQuestionToday($this->user_db_id);
     }
-
-
-
-} 
+}
+?>
