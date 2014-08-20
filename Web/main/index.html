@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
 </head>
 <body>
-    <form name="questions" method="post" action="checkanswers.html">
+    <form name="questions" method="post" action="checkanswer.php">
         <div class="q_container">
             <div class="q_title">
                 <label>测试题 A</label>
@@ -34,16 +34,18 @@
             </div>
             <p>题目是xXXXXXXXXXXXXXX</p>
             <ul>
-                <li><input type="radio" value="1" name="B" id="B1"/><label for="B1"></label>B111</li>
-                <li><input type="radio" value="2" name="B" id="B2"/><label for="B2"></label>B222</li>
-                <li><input type="radio" value="3" name="B" id="B3"/><label for="B3"></label>B333</li>
-                <li><input type="radio" value="4" name="B" id="B4"/><label for="B4"></label>B444</li>
+                <li><input type="checkbox" value="1" name="B" id="B1"/><label for="B1"></label>B111</li>
+                <li><input type="checkbox" value="2" name="B" id="B2"/><label for="B2"></label>B222</li>
+                <li><input type="checkbox" value="3" name="B" id="B3"/><label for="B3"></label>B333</li>
+                <li><input type="checkbox" value="4" name="B" id="B4"/><label for="B4"></label>B444</li>
             </ul>
             <div class="explain_container" align="center">
                 <p class="explain" id="BE"></p>
             </div>
         </div>
         <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
+        <input type="hidden" value="user_db_id" name="user_id"/>
+        <!--用结果用 二进制数+0 表示：bindec,decbin -->
     </form>
 </body>
 <SCRIPT type="text/javascript">
@@ -51,10 +53,17 @@
         $(":radio").change(function(){
             is_submit_enable();
         });
+        $(":checkbox").change()(function(){
+            is_submit_enable();
+        });
+
         $("input#submitanswer").click(function(){
             alert($("form:first").serialize());
-            var post_value =$("form:first").serialize();
+//            提交 包括： 1. user_db_id
+//            2. 所有的答案
             $("form:first").submit();
+            return true;
+
             $.get(
                     "checkanswer.php",
                     $("form:first").serialize(),
@@ -63,14 +72,17 @@
 
                     }
 //http://www.cnblogs.com/ccdc/archive/2012/04/18/2455637.html
-
+//            AJAX可以用JSON传值
+//            比如PHP端一个数组是$arr
+//            利用  echo  json_encode($arr)
+//            在客户端用AJAX可以接收这个数组
             )
 
             //return true;
         });
 
         function is_submit_enable(){
-            if($(":checked").length == 2){
+            if($(":checked").length > 2){
                 $("input[name=submitanswer]").removeAttr("disabled").css("background-color","orange");
             }
         }
