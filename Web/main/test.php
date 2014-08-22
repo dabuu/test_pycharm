@@ -10,6 +10,37 @@
 //
 //echo "'$var1'";
 
+
+
+$answer  = "1";
+
+
+echo $answer_translate =  Answer2Bin(explode("{#$}", $answer));
+echo Answer2Dec($answer_translate);
+exit;
+function Answer2Bin($array_answer_id)
+{
+
+
+    foreach ($array_answer_id as $key=>$value) {
+        echo $array_answer_id[$key] = decbin(intval($value)-1);
+        echo "<br/>";
+    }
+    return implode("#", $array_answer_id);
+}
+
+function Answer2Dec($answer_str)
+{
+    $array_temp_answer = explode("#",$answer_str);
+
+    foreach ($array_temp_answer as $key=>$value) {
+        echo "<br/>";
+        echo $array_temp_answer[$key] = bindec(strval($value)) + 1;
+    }
+    echo "<br/>";
+    return implode("#",$array_temp_answer);
+}
+
 include "wx_question.php";
 
 $answer_array  = array('foo' => 'bar', 33 => 'bin', 'lorem' => 'ipsum');

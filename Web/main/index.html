@@ -12,7 +12,10 @@
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
 </head>
 <body>
-    <form name="questions" method="post" action="checkanswer.php">
+    <div class="answer_result">
+        这里显示结果。。
+    </div>
+    <form name="questions" method="post" action="">
         <div class="q_container">
             <div class="q_title">
                 <label>测试题 A</label>
@@ -25,7 +28,7 @@
                 <li><input type="radio" value="4" name="A" id="A4"/><label for="A4"></label>A444</li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="AE"></p>
+                <p class="explain" id="AE">这里显示 答案 和解释</p>
             </div>
         </div>
         <div class="q_container">
@@ -34,41 +37,60 @@
             </div>
             <p>题目是xXXXXXXXXXXXXXX</p>
             <ul>
-                <li><input type="checkbox" value="1" name="B" id="B1"/><label for="B1"></label>B111</li>
-                <li><input type="checkbox" value="2" name="B" id="B2"/><label for="B2"></label>B222</li>
-                <li><input type="checkbox" value="3" name="B" id="B3"/><label for="B3"></label>B333</li>
-                <li><input type="checkbox" value="4" name="B" id="B4"/><label for="B4"></label>B444</li>
+                <li><input type="checkbox" value="1" name="23[]" id="B1"/><label for="B1"></label>B111</li>
+                <li><input type="checkbox" value="2" name="23[]" id="B2"/><label for="B2"></label>B222</li>
+                <li><input type="checkbox" value="3" name="23[]" id="B3"/><label for="B3"></label>B333</li>
+                <li><input type="checkbox" value="4" name="23[]" id="B4"/><label for="B4"></label>B444</li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="BE"></p>
+                <p class="explain" id="BE">这里显示 答案 和解释</p>
             </div>
         </div>
         <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
-        <input type="hidden" value="user_db_id" name="user_id"/>
+        <input type="hidden" value="user_db_id*22-1_23-0#11" name="info"/>
         <!--用结果用 二进制数+0 表示：bindec,decbin -->
     </form>
+<div id="result">[test]</div>
 </body>
 <SCRIPT type="text/javascript">
     $(document).ready(function(){
+
         $(":radio").change(function(){
             is_submit_enable();
         });
-        $(":checkbox").change()(function(){
-            is_submit_enable();
+        $(":checkbox").change(function(){
+           is_submit_enable();
         });
 
         $("input#submitanswer").click(function(){
-            alert($("form:first").serialize());
-//            提交 包括： 1. user_db_id
-//            2. 所有的答案
-            $("form:first").submit();
-            return true;
+//            alert($("form:first").serialize());
+////            提交 包括： 1. user_db_id
+////            2. 所有的答案
+//            $("form:first").submit();
+//            return true;
 
-            $.get(
+            $.post(
                     "checkanswer.php",
                     $("form:first").serialize(),
                     function(data)
                     {
+                        $("#result").after(data);
+//                        var objs = eval("("+data+")");
+//                        for(var key in objs)
+//                        {
+//                            var k = key;
+//                            alert(key);
+//                            alert(objs[k]);
+//                            alert(objs[key]);
+//                        }
+
+//                        alert(objs.A);
+//                        alert(objs.B.length);
+//                        alert(objs.B[0]);
+                        alert(objs[0]);
+
+//                        alert(data.B[0]);
+
 
                     }
 //http://www.cnblogs.com/ccdc/archive/2012/04/18/2455637.html
@@ -82,7 +104,7 @@
         });
 
         function is_submit_enable(){
-            if($(":checked").length > 2){
+            if($(":checked").length == 2){
                 $("input[name=submitanswer]").removeAttr("disabled").css("background-color","orange");
             }
         }

@@ -6,13 +6,35 @@
  * Time: 上午10:37
  */
 
+//print_r($_POST);
+//echo json_encode($_POST);
+//
+//exit;
 
+//{"A":"2","23":["2","3"],"user_id":"user_db_id*22-1_23-0#11"}
 
-if(!isset($_POST['user_id']) || empty($_POST['user_id']))
+if(!isset($_POST['info']) || empty($_POST['info']))
 {
-    echo "欢迎使用";
+    echo "欢迎使用SF问答!";
     exit;
 }
+
+// handle user_id: user_db_id, and correct_answers, such as:"user_db_id*22-1_23-0#11"
+$temp_info = explode("*", $_POST['info'],2);
+//    $GLOBALS['user_id'] = $temp_user_id[0];
+$user_db_id = $temp_info[0];
+//$correct_answers_array = array();
+
+$correct_answers_array = explode("_", $temp_info[1]);
+
+
+
+
+
+
+
+
+
 // handle post values;
 $questions_count = 2;
 
