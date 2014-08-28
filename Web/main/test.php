@@ -10,7 +10,12 @@
 //
 //echo "'$var1'";
 
-
+$test_array = array( 0 => 'A', 1 => 23, 2 => 'C' ) ;
+print_r($test_array);
+echo "<br/>".$test_array['0']."<br/>";
+echo $test_array[1]."<br/>";
+echo $test_array[2]."<br/>";
+exit;
 
 $answer  = "1";
 

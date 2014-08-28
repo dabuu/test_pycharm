@@ -22,13 +22,13 @@
             </div>
             <p>题目是xXXXXXXXXXXXXXX</p>
             <ul>
-                <li><input type="radio" value="1" name="A" id="A1"/><label for="A1"></label>A111</li>
-                <li><input type="radio" value="2" name="A" id="A2"/><label for="A2"></label>A222</li>
-                <li><input type="radio" value="3" name="A" id="A3"/><label for="A3"></label>A333</li>
-                <li><input type="radio" value="4" name="A" id="A4"/><label for="A4"></label>A444</li>
+                <li><input type="radio" value="1" name="A" id="A1"/><label for="A1">A111</label></li>
+                <li><input type="radio" value="2" name="A" id="A2"/><label for="A2">A222</label></li>
+                <li><input type="radio" value="3" name="A" id="A3"/><label for="A3">A333</label></li>
+                <li><input type="radio" value="4" name="A" id="A4"/><label for="A4">A444</label></li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="AE">这里显示 答案 和解释</p>
+                <p class="explain" id="A_E">这里显示 答案 和解释</p>
             </div>
         </div>
         <div class="q_container">
@@ -37,17 +37,32 @@
             </div>
             <p>题目是xXXXXXXXXXXXXXX</p>
             <ul>
-                <li><input type="checkbox" value="1" name="23[]" id="B1"/><label for="B1"></label>B111</li>
-                <li><input type="checkbox" value="2" name="23[]" id="B2"/><label for="B2"></label>B222</li>
-                <li><input type="checkbox" value="3" name="23[]" id="B3"/><label for="B3"></label>B333</li>
-                <li><input type="checkbox" value="4" name="23[]" id="B4"/><label for="B4"></label>B444</li>
+                <li><input type="checkbox" value="1" name="23[]" id="B1"/><label for="B1">B111</label></li>
+                <li><input type="checkbox" value="2" name="23[]" id="B2"/><label for="B2">B222</label></li>
+                <li><input type="checkbox" value="3" name="23[]" id="B3"/><label for="B3">B333</label></li>
+                <li><input type="checkbox" value="4" name="23[]" id="B4"/><label for="B4">B444</label></li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="BE">这里显示 答案 和解释</p>
+                <p class="explain" id="B_E">这里显示 答案 和解释</p>
+            </div>
+        </div>
+        <div class="q_container">
+            <div class="q_title">
+                <label>测试题 C</label>
+            </div>
+            <p>题目是xXXXXXXXXXXXXXX</p>
+            <ul>
+                <li><input type="radio" value="1" name="C" id="C1"/><label for="C1">C111</label></li>
+                <li><input type="radio" value="2" name="C" id="C2"/><label for="C2">C222</label></li>
+                <li><input type="radio" value="3" name="C" id="C3"/><label for="C3">C333</label></li>
+                <li><input type="radio" value="4" name="C" id="C4"/><label for="C4">C444</label></li>
+            </ul>
+            <div class="explain_container" align="center">
+                <p class="explain" id="C_E">这里显示 答案 和解释</p>
             </div>
         </div>
         <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
-        <input type="hidden" value="user_db_id*22-1_23-0#11" name="info"/>
+        <input type="hidden" value="user_db_id" name="info"/>
         <!--用结果用 二进制数+0 表示：bindec,decbin -->
     </form>
 <div id="result">[test]</div>
@@ -55,12 +70,12 @@
 <SCRIPT type="text/javascript">
     $(document).ready(function(){
 
-        $(":radio").change(function(){
+        $(":radio,:checkbox").change(function(){
             is_submit_enable();
         });
-        $(":checkbox").change(function(){
-           is_submit_enable();
-        });
+//        $(":checkbox").change(function(){
+//           is_submit_enable();
+//        });
 
         $("input#submitanswer").click(function(){
 //            alert($("form:first").serialize());
@@ -104,8 +119,13 @@
         });
 
         function is_submit_enable(){
-            if($(":checked").length == 2){
+//            if($("input:checkbox").is(":checked") && $("input:radio").is(":checked")){
+            if($('div.q_container:not(:has(:checked))').length == 0){
                 $("input[name=submitanswer]").removeAttr("disabled").css("background-color","orange");
+            }
+            else
+            {
+                $("input[name=submitanswer]").attr("disabled","disable").css("background-color","");
             }
         }
     });

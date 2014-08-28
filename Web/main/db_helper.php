@@ -30,6 +30,7 @@ define("GetTodayQuestionsDateTime","SELECT `t_questions_today`.`qt_id`,`t_questi
 WHERE DATE(`t_questions_today`.`qt_date`) = DATE(now()) ");
 define("GenerateTodayQuestions_TPL","INSERT INTO `app_dabuu`.`t_questions_today` (`f_question_id`) VALUES %s;"); // here %s could be "(2),(3),(4)"
 define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
+define("SelectQuestionExplainByIDs", "SELECT `t_questions_today`.`qt_id`, `t_questions`.`q_answer_id`, `t_questions`.`q_explain` FROM `t_questions_today` left join `t_questions` on `t_questions`.`q_id` = `t_questions_today`.`f_question_id` where `t_questions_today`.`qt_id` in (%s))");
 
 // user operation query
 class db_helper {
@@ -50,6 +51,48 @@ class db_helper {
         return ($answer_count[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
     }
 
+    function SelectQuestionsInfoByIDs($question_ids)
+    {
+        $query_result = $this->mysqli->query(sprintf(SelectQuestionExplainByIDs, $question_ids));
+        $questions_info_array = array();
+        if($query_result->num_rows)
+        {
+            while($row = $query_result->fetch_array())
+            {
+                $temp_show_info_array = array();
+                $temp_show_info_array['answerText'] = FormatAnswer2ABCD($row['q_answer_id']);
+                $temp_show_info_array['answerNum'] = str_replace("{#$}","#", $row['q_answer_id']);
+                $temp_show_info_array['explain'] = $row['q_explain'];
+
+                $questions_info_array[$row['q_id']] =$temp_show_info_array;
+            }
+        }
+        return $questions_info_array;
+    }
+    function FormatAnswer2ABCD($db_answer_info)
+    {
+        $answer_info_string = "";
+        foreach(explode("{#$}", $db_answer_info) as $value)
+        {
+
+            switch($value)
+            {
+                case 1:
+                    $answer_info_string .= "A";
+                    break;
+                case 2:
+                    $answer_info_string .= "B";
+                    break;
+                case 3:
+                    $answer_info_string .= "C";
+                    break;
+                case 4:
+                    $answer_info_string .= "D";
+                    break;
+            }
+        }
+        return $answer_info_string;
+    }
 
     function QueryUserID($user_id)
     {

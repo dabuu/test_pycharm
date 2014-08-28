@@ -7,82 +7,77 @@
  */
 
 //print_r($_POST);
-//echo json_encode($_POST);
+//
+//echo"<br/>";
+//echo $_POST[1];
+////print_r(array_slice(array_keys($_POST),0, -1));
+//exit;
+//echo json_encode(array_slice($_POST,0, -1));
 //
 //exit;
 
-//{"A":"2","23":["2","3"],"user_id":"user_db_id*22-1_23-0#11"}
-
+//{"A":"2","23":["2","3"],"user_id":"user_db_id"}
 if(!isset($_POST['info']) || empty($_POST['info']))
 {
     echo "欢迎使用SF问答!";
     exit;
 }
 
-// handle user_id: user_db_id, and correct_answers, such as:"user_db_id*22-1_23-0#11"
-$temp_info = explode("*", $_POST['info'],2);
-//    $GLOBALS['user_id'] = $temp_user_id[0];
-$user_db_id = $temp_info[0];
-//$correct_answers_array = array();
+// initialize mysql
+//$mysql_helper = new \sf_wx_questions\db_helper(); //comment back
+$qt_id_array = array_slice(array_keys($_POST),0, -1);
 
-$correct_answers_array = explode("_", $temp_info[1]);
+// user info
+$user_id = $_POST['info'];
 
-
-
-
-
-
-
-
-
-// handle post values;
-$questions_count = 2;
-
-if(count($_POST) > $questions_count)
+// answers info: qt_id, answer_value, user_id
+$insert_user_answers_string = ""; // query = insert user info into DB
+$insert_value_template = "( %s, %s, %s)";
+$user_answers_array = array();
+for($i=0; $i< count($qt_id_array); $i++)
 {
-    $answer_array = array_slice($_POST,0,$questions_count);
-    $user_id = $_POST['user_id'];
-    update_user_2_db();
-}
-else
-{
-    echo "欢迎使用";
-    exit;
-}
+    // >> array_keys($_POST)[$i] // qt_id   >>  $_POST[$i] //user_answer >>  (`f_qt_id` ,`f_user_id` ,`rst_value`)
 
+    if(is_array($_POST[$qt_id_array[$i]]))
+    {
+        $insert_user_answers_string .=sprintf($insert_value_template,strval($qt_id_array[$i]), $user_id, implode("{#$}", $_POST[$qt_id_array[$i]]));
+        $user_answers_array[$qt_id_array[$i]] = implode("#", $_POST[$qt_id_array[$i]]);
+    }
+    else
+    {
+        $insert_user_answers_string .=sprintf($insert_value_template,strval($qt_id_array[$i]), $user_id, $_POST[$qt_id_array[$i]]);
+        $user_answers_array[$qt_id_array[$i]] = $_POST[$qt_id_array[$i]];
+    }
 
-// update user's answers
-function update_user_2_db()
-{
-    $wx_usr = new \sf_wx_questions\wx_user($GLOBALS["user_id"]);
-    $temp_array = $wx_usr->UpdateAnswers2DB($GLOBALS["answer_array"]);
-    print_r($temp_array);
-//    echo json_encode($temp_array);
-
-//    echo json_encode($wx_usr->UpdateAnswers2DB($GLOBALS["answer_array"])); //return array;
+    if($i != count($qt_id_array)-1)
+    {
+        $insert_user_answers_string .= ",";
+    }
 }
 
+if($insert_user_answers_string != "")
+{
+//    echo "<br/>".$insert_user_answers_string;
+    $mysql_helper->InsertUserAnswers(rtrim($insert_user_answers_string, ","));  //comment back
+}
 
+// qt_info
+//$qt_id_array = array_slice(array_keys($_POST),0, -1);
+$qt_id_array_string .= sprintf("(%s)", implode(",", $qt_id_array));//$qt_id_array);
+$questions_info_array = $mysql_helper->SelectQuestionExplainByIDs($qt_id_array_string);  //comment back
 
+echo json_encode($questions_info_array);
 
-//
-//foreach ($_POST as $key => $value) {
-//    echo "<br/>".$key."=>".$value;
-//}
-//
-//print_r($_POST);
-//echo "<br/>";
-//print_r(array_slice($_POST,0,2));
-//echo "<br/>";
-//foreach (array_keys(array_slice($_POST,0,2)) as $key) {
-//    echo "<br/>".$key;
-//}
-//
-//
-//function check_answers()
+// compare results: todo : shown or not
+//$total_questions_count = count($user_answers_array);
+//if($total_questions_count  == count($questions_info_array))
 //{
-//
-//    return 1; //返回 一个数组： 正确的个数 + 每道题的解释，
+//    foreach ($user_answers_array as $key => $value) {
+//        if($value != $questions_info_array[$key]['answerNum'])
+//        {
+//            $total_questions_count--;
+//        }
+//    }
 //}
 
 
