@@ -14,7 +14,14 @@
 //exit;
 //echo json_encode(array_slice($_POST,0, -1));
 //
-//exit;
+
+
+$t_array = array();
+$t_array['A'] = array('explain'=>"AAAAAAAAAA");
+$t_array["B"] = array('explain'=>"2323232323");
+$t_array['C'] = array('explain'=>"CCCCCCCCCCCCC");
+echo json_encode($t_array);
+exit;
 
 //{"A":"2","23":["2","3"],"user_id":"user_db_id"}
 if(!isset($_POST['info']) || empty($_POST['info']))

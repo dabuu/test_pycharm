@@ -28,7 +28,7 @@
                 <li><input type="radio" value="4" name="A" id="A4"/><label for="A4">A444</label></li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="A_E">这里显示 答案 和解释</p>
+                <p class="explain" id="A_E"></p>
             </div>
         </div>
         <div class="q_container">
@@ -43,7 +43,7 @@
                 <li><input type="checkbox" value="4" name="23[]" id="B4"/><label for="B4">B444</label></li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="B_E">这里显示 答案 和解释</p>
+                <p class="explain" id="B_E"></p>
             </div>
         </div>
         <div class="q_container">
@@ -58,7 +58,7 @@
                 <li><input type="radio" value="4" name="C" id="C4"/><label for="C4">C444</label></li>
             </ul>
             <div class="explain_container" align="center">
-                <p class="explain" id="C_E">这里显示 答案 和解释</p>
+                <p class="explain" id="C_E"></p>
             </div>
         </div>
         <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
@@ -83,37 +83,47 @@
 ////            2. 所有的答案
 //            $("form:first").submit();
 //            return true;
-
-            $.post(
-                    "checkanswer.php",
-                    $("form:first").serialize(),
-                    function(data)
+            $("input#submitanswer").val("提交中...");
+            $("input#submitanswer").attr("disabled","disable").css("background-color","");
+            $.ajax({
+                type:"post",
+                url: "checkanswer.php",
+                dataType:"json",
+                data:$("form:first").serialize(),
+                success:function(data){
+                    $("#result").after(data);
+                    var objs = data;
+                    for(var key in objs)
                     {
-                        $("#result").after(data);
+                        $("#"+key+"_E").html("这里显示 答案 和解释:" + objs[key]['explain']);
+                    }
+                    $("input#submitanswer").hide();
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    alert(errorThrown);
+                    $("input#submitanswer").val("提交答案!");
+                }
+            });
+
+//            $.post(
+//                    "checkanswer.php",
+//                    $("form:first").serialize(),
+//                    function(data)
+//                    {
+//                        $("#result").after(data);
 //                        var objs = eval("("+data+")");
 //                        for(var key in objs)
 //                        {
-//                            var k = key;
-//                            alert(key);
-//                            alert(objs[k]);
-//                            alert(objs[key]);
+//                            $("#"+key+"_E").html("这里显示 答案 和解释:" + objs[key]['explain']);
 //                        }
-
-//                        alert(objs.A);
-//                        alert(objs.B.length);
-//                        alert(objs.B[0]);
-                        alert(objs[0]);
-
-//                        alert(data.B[0]);
-
-
-                    }
+//                        $("input#submitanswer").hide();
+//                    }
 //http://www.cnblogs.com/ccdc/archive/2012/04/18/2455637.html
 //            AJAX可以用JSON传值
 //            比如PHP端一个数组是$arr
 //            利用  echo  json_encode($arr)
 //            在客户端用AJAX可以接收这个数组
-            )
+//            );
 
             //return true;
         });

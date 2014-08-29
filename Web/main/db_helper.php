@@ -60,14 +60,15 @@ class db_helper {
             while($row = $query_result->fetch_array())
             {
                 $temp_show_info_array = array();
-                $temp_show_info_array['answerText'] = FormatAnswer2ABCD($row['q_answer_id']);
-                $temp_show_info_array['answerNum'] = str_replace("{#$}","#", $row['q_answer_id']);
+                //$temp_show_info_array['answerText'] = FormatAnswer2ABCD($row['q_answer_id']);
+                //$temp_show_info_array['answerNum'] = str_replace("{#$}","#", $row['q_answer_id']);
                 $temp_show_info_array['explain'] = $row['q_explain'];
 
                 $questions_info_array[$row['q_id']] =$temp_show_info_array;
             }
         }
         return $questions_info_array;
+
     }
     function FormatAnswer2ABCD($db_answer_info)
     {
