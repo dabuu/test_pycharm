@@ -1,71 +1,111 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: dabuwang
- * Date: 14-8-20
- * Time: 下午4:30
- */
-//$var1 = "test1";
-//$var2 = "test2";
-//
-//echo "'$var1'";
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Reg</title>
+    <style>
+        .state1{
+            color:#aaa;
+        }
+        .state2{
+            color:#000;
+        }
+        .state3{
+            color:red;
+        }
+        .state4{
+            color:green;
+        }
+    </style>
+    <script type="application/javascript" src="../jquery/jquery-1.11.1.min.js"></script>
+    <script>
+        $(function(){
 
-$test_array = array( 0 => 'A', 1 => 23, 2 => 'C' ) ;
-print_r($test_array);
-echo "<br/>".$test_array['0']."<br/>";
-echo $test_array[1]."<br/>";
-echo $test_array[2]."<br/>";
-exit;
+            var ok1=false;
+            var ok2=false;
+            var ok3=false;
+            var ok4=false;
+            // 验证用户名
+            $('input[name="username"]').focus(function(){
+                $(this).next().text('用户名应该为3-20位之间').removeClass('state1').addClass('state2');
+            }).blur(function(){
+                if($(this).val().length >= 3 && $(this).val().length <=12 && $(this).val()!=''){
+                    $(this).next().text('输入成功').removeClass('state1').addClass('state4');
+                    ok1=true;
+                }else{
+                    $(this).next().text('用户名应该为3-20位之间').removeClass('state1').addClass('state3');
+                }
 
-$answer  = "1";
+            });
 
+            //验证密码
+            $('input[name="password"]').focus(function(){
+                $(this).next().text('密码应该为6-20位之间').removeClass('state1').addClass('state2');
+            }).blur(function(){
+                if($(this).val().length >= 6 && $(this).val().length <=20 && $(this).val()!=''){
+                    $(this).next().text('输入成功').removeClass('state1').addClass('state4');
+                    ok2=true;
+                }else{
+                    $(this).next().text('密码应该为6-20位之间').removeClass('state1').addClass('state3');
+                }
 
-echo $answer_translate =  Answer2Bin(explode("{#$}", $answer));
-echo Answer2Dec($answer_translate);
-exit;
-function Answer2Bin($array_answer_id)
-{
+            });
 
+            //验证确认密码
+            $('input[name="repass"]').focus(function(){
+                $(this).next().text('输入的确认密码要和上面的密码一致,规则也要相同').removeClass('state1').addClass('state2');
+            }).blur(function(){
+                if($(this).val().length >= 6 && $(this).val().length <=20 && $(this).val()!='' && $(this).val() == $('input[name="password"]').val()){
+                    $(this).next().text('输入成功').removeClass('state1').addClass('state4');
+                    ok3=true;
+                }else{
+                    $(this).next().text('输入的确认密码要和上面的密码一致,规则也要相同').removeClass('state1').addClass('state3');
+                }
 
-    foreach ($array_answer_id as $key=>$value) {
-        echo $array_answer_id[$key] = decbin(intval($value)-1);
-        echo "<br/>";
-    }
-    return implode("#", $array_answer_id);
-}
+            });
 
-function Answer2Dec($answer_str)
-{
-    $array_temp_answer = explode("#",$answer_str);
+            //验证邮箱
+            $('input[name="email"]').focus(function(){
+                $(this).next().text('请输入正确的EMAIL格式').removeClass('state1').addClass('state2');
+            }).blur(function(){
+                if($(this).val().search(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/)==-1){
+                    $(this).next().text('请输入正确的EMAIL格式').removeClass('state1').addClass('state3');
+                }else{
+                    $(this).next().text('输入成功').removeClass('state1').addClass('state4');
+                    ok4=true;
+                }
 
-    foreach ($array_temp_answer as $key=>$value) {
-        echo "<br/>";
-        echo $array_temp_answer[$key] = bindec(strval($value)) + 1;
-    }
-    echo "<br/>";
-    return implode("#",$array_temp_answer);
-}
+            });
 
-include "wx_question.php";
+            //提交按钮,所有验证通过方可提交
 
-$answer_array  = array('foo' => 'bar', 33 => 'bin', 'lorem' => 'ipsum');
+            $('#submit').click(function(){
+                alert(ok1);
+                alert(ok2);
+                alert(ok3);
+                alert(ok4);
+                if(ok1 && ok2 && ok3 && ok4){
+                    alert("go");
+                    $('form').submit();
+                }else{
+                    return false;
+                }
+            });
 
-foreach ($answer_array as $value) {
-    echo "<br/>".$value;
-}
-exit;
+        });
+    </script>
+</head>
+<body>
 
-$array_qt_ids = array_keys($answer_array);
-print_r($array_qt_ids);
-$array_answer_ids = array_values($answer_array);
-print_r($array_answer_ids);
-$wx_user_id = 10;
+<form action='do.php' method='post' >
+    用 户 名:<input type="text" name="username">
+    <span class='state1'>请输入用户名</span><br/><br/>
+    密　　码:<input type="password" name="password">
+    <span class='state1'>请输入密码</span><br/><br/>
+    确认密码:<input type="password" name="repass">
+    <span class='state1'>请输入确认密码</span><br/><br/>
+    邮　　箱:<input type="text" name="email">
+    <span class='state1'>请输入邮箱</span><br/><br/>
+    <input type="button" id="submit" value="注册"/>
 
-echo $update_query = "($array_qt_ids[0],$wx_user_id , $array_answer_ids[0])";
-echo "<br/>";
-for($i=1; $i<count($array_answer_ids); $i++)
-{
-    echo $update_query .= ",($array_qt_ids[$i],$wx_user_id,  $array_answer_ids[$i])";
-    echo "<br/>";
-}
-?>
+</form>
+</body>
