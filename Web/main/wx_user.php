@@ -9,7 +9,7 @@ namespace sf_wx_questions;
 include "db_helper.php";
 
 class wx_user {
-    private $wx_user_id, $mysql_helper;
+    private $wx_user_id,$wx_user_sha1_id,$mysql_helper;
     /*
      * @var int
      */
@@ -19,6 +19,7 @@ class wx_user {
         $this->mysql_helper = new db_helper();
         $this->user_db_id = $this->mysql_helper->QueryUserID($wx_user_id);
         $this->wx_user_id = $wx_user_id;
+        $this->wx_user_sha1_id = sha1($wx_user_id);
     }
 
 

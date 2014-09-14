@@ -1,0 +1,234 @@
+@charset "utf-8";
+body {
+    background: gainsboro;
+    color: #525252;
+    font: 14px/1.5 Tahoma, Geneva, sans-serif
+}
+body, p, ul, li, h1, h2, h3, h4, form, input, textarea, fieldset, label {
+    margin: 0;
+    padding: 0
+}
+li {
+    list-style: none
+}
+img, fieldset {
+    border: 0
+}
+em {
+    font-style: normal
+}
+a {
+    color: #6391c1;
+    text-decoration: none;
+    margin-left: 5px
+}
+a:hover {
+    text-decoration: underline
+}
+.hidden-txt {
+    overflow: hidden
+}
+.logo {
+    width: 240px;
+    margin: 40px auto 40px
+}
+.logo a {
+    height: 36px;
+    display: block;
+    background: url(http://www.kmsocial.cn/assets/css/img/xilogo.png.pagespeed.ic.HZHjiM4GXC.png) no-repeat;
+    margin: 0
+}
+.signin-text {
+    width: 280px;
+    margin-left: 33px;
+    border: 1px solid #dcdcdc;
+    font-size: 12px;
+    margin-top: 9px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #494949;
+    padding: 9px 8px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1) inset
+}
+.signin-text:focus {
+    padding: 8px 7px;
+    border: 2px solid #ffa800;
+    outline: 0
+}
+.green-btn {
+    background: #4dc015;
+    cursor: pointer;
+    background: -moz-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4dc015), color-stop(100%, #379e05));
+    background: -webkit-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -o-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -ms-linear-gradient(top, #4dc015 0, #379e05 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#4dc015', endColorstr='#379e05', GradientType=0);
+    background: linear-gradient(top, #4dc015 0, #379e05 100%);
+    -moz-box-shadow: 0 1px 2px #b0b0b0, 0 1px 1px #58cd1f inset;
+    -webkit-box-shadow: 0 1px 2px #b0b0b0, 0 1px 1px #58cd1f inset;
+    box-shadow: 0 1px 2px #b0b0b0, 0 1px 1px #58cd1f inset;
+    color: #fff;
+    font-size: 14px;
+    border: 1px solid #379c06;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    text-shadow: 0 -1px 0 #349505;
+    opacity: .9
+}
+.green-btn:hover {
+    opacity: 1
+}
+.green-btn:active {
+    background: #379e05;
+    background: -moz-linear-gradient(top, #379e05 0, #4dc015 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #379e05), color-stop(100%, #4dc015));
+    background: -webkit-linear-gradient(top, #379e05 0, #4dc015 100%);
+    background: -o-linear-gradient(top, #379e05 0, #4dc015 100%);
+    background: -ms-linear-gradient(top, #379e05 0, #4dc015 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#379e05', endColorstr='#4dc015', GradientType=0);
+    background: linear-gradient(top, #379e05 0, #4dc015 100%)
+}
+.green-btn.disabled {
+    cursor: default;
+    opacity: .5
+}
+.green-btn.disabled:active {
+    background: #4dc015;
+    background: -moz-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4dc015), color-stop(100%, #379e05));
+    background: -webkit-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -o-linear-gradient(top, #4dc015 0, #379e05 100%);
+    background: -ms-linear-gradient(top, #4dc015 0, #379e05 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#4dc015', endColorstr='#379e05', GradientType=0);
+    background: linear-gradient(top, #4dc015 0, #379e05 100%)
+}
+.errordata {
+    display: none;
+    /*background: url(http://www.kmsocial.cn/assets/css/img/alert.png.pagespeed.ce.TD2G5Ejbr0.png) no-repeat;*/
+    color: #ff1e1e;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    margin-top: 6px;
+    margin-left: 110px;
+    padding-left: 23px
+}
+#main {
+    width: 530px;
+    height: 400px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative
+}
+#reg-box, #login-box {
+    position: absolute;
+    width: 512px
+}
+.reg-bg {
+    background: #fff;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, .05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .05)
+}
+.reg-bg li {
+    height: 66px
+}
+#agreece {
+    font-size: 12px
+}
+#reg-box form {
+    padding: 42px 50px 40px 55px
+}
+#reg-box .green-btn {
+    width: 86px;
+    height: 31px
+}
+#reg-field {
+    margin-bottom: 20px
+}
+#agree, #signin-rememberme {
+    vertical-align: -2px;
+    margin-right: 8px
+}
+#create_account {
+    text-align: center;
+    margin-bottom: 35px;
+    margin-top: -24px
+}
+#have-id {
+    height: 45px;
+    line-height: 45px;
+    background: #f6f6f6;
+    -moz-box-shadow: -1px -1px 0 #ddd;
+    -webkit-box-shadow: -1px -1px 0 #ddd;
+    box-shadow: -1px -1px 0 #ddd;
+    text-align: center;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px
+}
+#verify {
+    width: 90px
+}
+.verify {
+    margin-bottom: 15px;
+    position: relative
+}
+.verify img, .verify a {
+    vertical-align: middle
+}
+.verify img {
+    cursor: pointer
+}
+#verifyCode {
+    position: absolute;
+    bottom: 0;
+    left: 0
+}
+#platform {
+    padding: 25px 50px 30px;
+    text-align: center
+}
+#platform ul {
+    margin: 20px 0
+}
+#platform li {
+    margin-bottom: 12px
+}
+#platform li a {
+    margin: 0
+}
+#platform p {
+    text-align: left
+}
+#login-box form {
+    padding: 38px 50px 40px 55px
+}
+#login-box .green-btn {
+    text-align: center;
+    width: 87px;
+    height: 31px;
+    font-family: serif;
+    margin-left: 143px
+}
+#login-box .green-btn img {
+    margin: 0 0 0 10px;
+    vertical-align: -2px
+}
+#user-reg {
+    background: #fefdfd;
+    height: 57px;
+    line-height: 57px;
+    text-align: center;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    margin: 18px auto 0
+}

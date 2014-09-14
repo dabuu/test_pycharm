@@ -6,8 +6,6 @@
  * Date: 14-8-4
  * Time: 下午5:00
  */
-// todo: get user_guid
-$fake_user_guid = "9877655";
 
 $page_title = "有奖问答";
 include "header.html";
@@ -15,11 +13,14 @@ include "user.php";
 include "questions.php";
 
 //$user_id = $_GET['uid'];
+// todo: get user_guid
+$fake_user_guid = "9877655";
+
 $user = new \sf_wx_questions\wx_user($fake_user_guid);
 $has_answered = $user->HasAnswerQuestionToday(); // 是否已经答题，如果回答过 直接展示 答案。
 ?>
 <body>
-<form name="questions" method="post" action="checkanswer.php">
+<form name="questions" method="post" action="">
     <?php
     $today_questions = new \sf_wx_questions\questions(5); //生成 5道题
     if(count($today_questions->today_questions_array))
@@ -49,14 +50,30 @@ $has_answered = $user->HasAnswerQuestionToday(); // 是否已经答题，如果�
     }
     ?>
     <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
-    <input type="hidden" value="<?php echo $answers_str;?>" name="answers" />
+    <input type="hidden" value="<?php echo $answers_str;?>" name="info" id="info" />
     </form>
+<div id="result">[test]</div>
 <SCRIPT type="text/javascript">
     $(document).ready(function(){
         $(":radio").change(function(){
             is_submit_enable();
         });
         $("input#submitanswer").click(function(){
+            $.ajax({
+                type:"post",
+                url: "checkfocus.php",
+                dataType:"html",
+                //data:$("form:first").serialize(),
+                data:  { user_id: $("#info").val() },
+                success:function(data){
+                    $("#result").after(data);
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    alert(errorThrown);
+                    $("input#submitanswer").val("提交答案!");
+                }
+            });
+
             alert($("form:first").serialize());
             //var $temp_user_answer_info = $("input:hidden").val() + "+" + $("form:first").serialize();
             alert($("input:hidden").val());

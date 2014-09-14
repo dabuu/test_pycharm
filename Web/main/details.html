@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>详细信息</title>
+    <link rel="stylesheet" type="text/css" href="../css/home.css" />
+    <script language="javascript" type="text/javascript" src="../jquery/jquery-1.11.1.min.js"></script>
+    <script type="application/javascript" src="../jquery/geo.js"></script>
+    <script type="application/javascript">
+        $(document).ready(function(){
+        });
+    </script>
+</head>
+<body>
+        <h1 class="logo">
+            请完善详细信息
+        </h1>
+    <div id="main">
+        <div id="reg-box" >
+            <form class="reg-bg" method="post" action="#" id="reg_form" autocomplete="off">
+                <!--<fieldset id="reg-field">-->
+                    <!--<ul>-->
+                        <!--<li>-->
+                            <!--<label for="company_name">公司名称：</label>-->
+                            <!--<input tabindex="1" type="text" name="company_name" id="company_name" class="signin-text">-->
+                            <!--<p class="errordata" style="display: none;">昵称长度在3-20个字符之间</p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label>公司所在地：</label>-->
+                            <!--<select class="select" name="province" id="s1">-->
+                                <!--<option></option>-->
+                            <!--</select>-->
+                            <!--<select class="select" name="city" id="s2">-->
+                                <!--<option></option>-->
+                            <!--</select>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label for="phone">电  话：</label>-->
+                            <!--<input tabindex="3" type="text" name="phone" id="phone" class="signin-text" maxlength="15">-->
+                            <!--<p class="errordata" style="display: none;">请输入正确的电话格式</p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label for="contact">联 系 人：</label>-->
+                            <!--<input tabindex="4" type="text" name="contact" id="contact" class="signin-text" maxlength="30">-->
+                            <!--<p class="errordata" style="display: none;">最少6个字符</p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label for="wx_name">订阅号名称：</label>-->
+                            <!--<input tabindex="5" type="text" name="wx_name" id="wx_name" class="signin-text" maxlength="30">-->
+                            <!--<p class="errordata" style="display: none;">最少1个字符</p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<label>订阅号二维码图片：</label>-->
+                            <!--<input tabindex="6" type="file" accept="image/*" name="pic"  id="wx_pic" >-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</fieldset>-->
+                <table>
+                    <tr>
+                        <td class="c_subject">公司名称</td>
+                        <td class="c_info"><input id="name" type="text" name="name" size="20" maxlength="20"></td>
+                    </tr>
+                    <tr>
+                        <td class="c_subject">公司所在地</td>
+                        <td class="c_info">
+                            <select class="select" name="province" id="s1">
+                                <option></option>
+                            </select>
+                            <select class="select" name="city" id="s2">
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="c_subject">电话</td>
+                        <td class="c_info"><input id="phone" type="text" name="phone" size="20" maxlength="20"></td>
+                    </tr>
+                    <tr>
+                        <td class="c_subject">负责人</td>
+                        <td class="c_info"><input id="charger" type="text" name="charger" size="20" maxlength="20"></td>
+                    </tr>
+                    <tr>
+                        <td class="c_subject">订阅号名称</td>
+                        <td class="c_info"><input id="wx_id" type="text" name="wx_id" size="20" maxlength="20"></td>
+                    </tr>
+                    <tr>
+                        <td class="c_subject">订阅号二维码图片</td>
+                        <td class="c_info"><input type="file" name="wx_pic"/></td>
+                    </tr>
+                </table>
+
+                <div id="create_account">
+                    <button tabindex="7" id="create-btn" class="green-btn" type="submit"><span>完成</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

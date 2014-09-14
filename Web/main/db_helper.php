@@ -19,7 +19,7 @@ define("LatestID","SELECT @@IDENTITY ;");
  *  User Operation in DB
  */
 define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
-define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`) VALUES ('%s');");
+define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`) VALUES ('%s', '%s');");
 define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
 
 /*
@@ -116,7 +116,7 @@ class db_helper {
     private function InsertUser($user_id)
     {
 
-        $this->mysqli->query(sprintf(InsertUserWXId, $user_id)); // insert a new user
+        $this->mysqli->query(sprintf(InsertUserWXId, $user_id, sha1($user_id))); // insert a new user
         $result = $this->mysqli->query(LatestID);
         $result_user = $result->fetch_array();
         return $result_user[0];

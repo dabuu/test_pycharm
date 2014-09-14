@@ -6,14 +6,18 @@
  * Time: 上午10:37
  */
 
-//print_r($_POST);
+print_r($_POST);
 //
 //echo"<br/>";
 //echo $_POST[1];
 ////print_r(array_slice(array_keys($_POST),0, -1));
-//exit;
+exit;
 //echo json_encode(array_slice($_POST,0, -1));
 //
+
+// 是否关注 SF
+// focus on SF,NO : return false;
+// focus on SF,Yes: 跳转
 
 
 $t_array = array();
