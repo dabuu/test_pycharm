@@ -143,19 +143,19 @@
 //        });
 
         $(":radio").change(function(){
-            $(this).parent().parent().parent().find(".right_option").css("background-color","#666666");
-            $(this).parent().css("background-color","#66CCCC");
+            $(this).parent().parent().parent().find(".right_option").css({"background-color":"#666666", "color": "#ffffff"});
+            $(this).parent().css({"background-color":"#ffffff",  "color": "#666666"});
             is_submit_enable();
         });
 
         $(":checkbox").change(function(){
             if($(this).is(":checked"))
             {
-                $(this).parent().css("background-color","#66CCCC");
+                $(this).parent().css({"background-color":"#ffffff",  "color": "#666666"});
             }
             else
             {
-                $(this).parent().css("background-color","#666666");
+                $(this).parent().css({"background-color":"#666666", "color": "#ffffff"});
             }
             is_submit_enable();
         });

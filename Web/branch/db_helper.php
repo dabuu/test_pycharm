@@ -21,6 +21,7 @@ define("LatestID","SELECT @@IDENTITY ;");
 define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
 define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`) VALUES ('%s', '%s');");
 define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
+define("HasFocusOnSF", "SELECT `focus_on_sf` FROM `t_user` where `usr_id` = %d;");
 
 /*
  *  Questions Operation in DB
@@ -49,6 +50,13 @@ class db_helper {
         $rst_user_answer_count = $this->mysqli->query(sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id));
         $answer_count = $rst_user_answer_count->fetch_array();
         return ($answer_count[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
+    }
+
+    function HasFocusOnSFWX($u_db_id)
+    {
+        $rst_user_focus_status = $this->mysqli->query(sprintf(HasFocusOnSF,$u_db_id));
+        $user_focus_status = $rst_user_focus_status->fetch_array();
+        return $user_focus_status[0]; // if answer_count is 0, user don't answer questions today.
     }
 
     function SelectQuestionsInfoByIDs($question_ids)

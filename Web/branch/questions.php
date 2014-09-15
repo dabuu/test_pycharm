@@ -7,7 +7,7 @@
  */
 
 namespace sf_wx_questions;
-require_once "db_helper.php";
+include "db_helper.php";
 
 class questions {
 
