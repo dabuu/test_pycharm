@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <title>$page_title</title>
+    <script language="javascript" type="text/javascript" src="../jquery/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <style>
+        #share_instruction{
+            z-index: 2000000000;
+            opacity: 0.5;
+            position:absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="banner_container" >
+
+    <div>
+        <p><img src="./sharebtn.png" alt="分享" id="sharebtn"/></p>
+    </div>
+</div>
+<p>费罗斯福的煎熬了的解放路睡觉了发顺丰</p>
+<p>费罗斯福的煎熬了的解放路睡觉了发顺丰</p>
+</body>
+<SCRIPT type="text/javascript">
+    $(document).ready(function(){
+        $("#sharebtn").click(function(){
+            $(".banner_container").before('<div><img src="./share_instr.png" alt="" id="share_instruction"/></div>');
+        });
+
+    });
+</SCRIPT>
+</html>

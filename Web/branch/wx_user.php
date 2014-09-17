@@ -29,6 +29,11 @@ class wx_user {
         return $this->mysql_helper->HasAnswerQuestionToday($this->user_db_id);
     }
 
+    function TodayAnswerQuestionsInfo()
+    {
+
+    }
+
     function UpdateAnswers2DB($answer_array)
     {
         $array_qt_ids = array_keys($answer_array);

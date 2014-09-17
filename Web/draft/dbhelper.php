@@ -102,7 +102,7 @@ class dbhelper {
         $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime);
         if($qt_rst->num_rows == 0) // if NOT today questions, generate first
         {
-            $this->GetRandomQuestionsIDArray(0);   // insert into latest daily questions // todo: if return no is not correctly, should be handled
+            $this->GetRandomQuestionsIDArray(5);   // insert into latest daily questions // todo: if return no is not correctly, should be handled
             $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime); // select again, and get "$qt_rst"
         }
         // if today's questions has generated, return questions info directly
@@ -110,7 +110,8 @@ class dbhelper {
         $question_array = array();
         while($rst_row = $qt_rst->fetch_array())
         {
-            $question_array[] = new question($rst_row);
+            $temp_q = new question($rst_row);
+            $question_array[$temp_q->qt_id] = $temp_q;
         }
         $qt_rst->free();
         return $question_array;

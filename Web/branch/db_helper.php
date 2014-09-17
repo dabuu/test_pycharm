@@ -26,13 +26,14 @@ define("HasFocusOnSF", "SELECT `focus_on_sf` FROM `t_user` where `usr_id` = %d;"
 /*
  *  Questions Operation in DB
  */
-define("GetQuestionsRandomlyAsNum", "SELECT * FROM `app_dabuu`.`t_questions` LIMIT 0,2"); // todo: get question randomly
+define("GetQuestionsRandomlyAsNum", "SELECT * FROM `app_dabuu`.`t_questions` LIMIT 0,5"); // todo: get question randomly
 define("GetTodayQuestionsDateTime","SELECT `t_questions_today`.`qt_id`,`t_questions`.*  FROM `t_questions_today` LEFT JOIN `t_questions` ON `t_questions`.`q_id` = `t_questions_today`.`f_question_id`
 WHERE DATE(`t_questions_today`.`qt_date`) = DATE(now()) ");
 define("GenerateTodayQuestions_TPL","INSERT INTO `app_dabuu`.`t_questions_today` (`f_question_id`) VALUES %s;"); // here %s could be "(2),(3),(4)"
-define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
+define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`,`rst_iscorrect`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
 define("SelectQuestionExplainByIDs", "SELECT `t_questions_today`.`qt_id`, `t_questions`.`q_answer_id`, `t_questions`.`q_explain` FROM `t_questions_today` left join `t_questions` on `t_questions`.`q_id` = `t_questions_today`.`f_question_id` where `t_questions_today`.`qt_id` in (%s))");
-
+define("SelectUserCorrectCountToday", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and DATE(`answer_time`) = DATE(now()) and `rst_iscorrect` = 1");
+define("SelectUserCorrectCountHistory", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and `rst_iscorrect` = 1");
 // user operation query
 class db_helper {
     public $mysqli = null;
@@ -151,21 +152,22 @@ class db_helper {
     }
 
     // return an array of class question
+
     function GetTodayQuestions()
     {
         $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime);
         if($qt_rst->num_rows == 0) // if NOT today questions, generate first
         {
-            $this->GetRandomQuestionsIDArray(0);   // insert into latest daily questions // todo: if return no is not correctly, should be handled
+            $this->GetRandomQuestionsIDArray(5);   // insert into latest daily questions // todo: if return no is not correctly, should be handled
             $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime); // select again, and get "$qt_rst"
         }
         // if today's questions has generated, return questions info directly
         include "wx_question.php";
-
         $question_array = array();
         while($rst_row = $qt_rst->fetch_array())
         {
-            $question_array[] = new wx_question($rst_row);
+            $temp_q = new wx_question($rst_row);
+            $question_array[$temp_q->qt_id] = $temp_q;
         }
         $qt_rst->free();
         return $question_array;
@@ -176,6 +178,22 @@ class db_helper {
     {
         $this->mysqli->query(sprintf(InsertUserAnswer,$value_format_str));
         return $this->mysqli->errno;
+    }
+
+    function GetUserTodayCorrectNum($user_db_id)
+    {
+        $query_rst = $this->mysqli->query(sprintf(SelectUserCorrectCountToday, $user_db_id));
+        $count_rst = $query_rst->fetch_array();
+        $query_rst->free();
+        return $count_rst[0];
+    }
+
+    function GetUserHistoryCorrectNum($user_db_id)
+    {
+        $query_rst = $this->mysqli->query(sprintf(SelectUserCorrectCountToday, $user_db_id));
+        $count_rst = $query_rst->fetch_array();
+        $query_rst->free();
+        return $count_rst[0];
     }
 }
 

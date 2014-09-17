@@ -7,25 +7,39 @@
  * Time: 下午5:00
  */
 
+$page_title = "会计答题";
+require "header.html";
+if(!isset($_GET['uid']) || empty($_GET['uid']))
+{
+    echo "欢迎使用";
+    exit;
+}
+
+
 include "wx_user.php";
 include "questions.php";
 
-//$user_id = $_GET['uid'];
 // todo: get user_guid
-$user_id = "9877655";
+$user_id = $_GET['uid'];
+//$user_id = "9877655";
 
 $user = new \sf_wx_questions\wx_user($user_id);
+
 $has_answered = $user->HasAnswerQuestionToday(); // 是否已经答题，如果回答过 直接展示 答案。
+if($has_answered)
+{
+    header("Location: ./wx_answer.php?uid=".$user_id);
+    exit;
+}
 
 
-$page_title = "会计答题";
-require "header.html";
+
 
 
 ?>
 
 <body>
-<form name="questions" method="post" action="../main/indexanswer.html?uid=">
+<form name="questions" method="post" action="./wx_answer.php?uid=<?php echo $user_id;?>">
     <?php
     $today_questions = new \sf_wx_questions\questions(5); //生成 5道题
     if(count($today_questions->today_questions_array))
@@ -41,7 +55,7 @@ require "header.html";
             {
                 $temp_id = sprintf("%d_%d",$question_item->qt_id, $option_index);
                 echo '<tr><td class="left_label"><span>'.$answer_index[$option_index].'</span></td><td class="right_option">';
-                echo '<input type="'.(($question_item->q_type == 1)? 'radio':'checkbox').'" value="'.$option_index.'" name="'.$question_item->qt_id.'" id="'.$temp_id .'"/>';
+                echo '<input type="'.(($question_item->q_type == 1)? 'radio':'checkbox').'" value="'.$option_index.'" name="'.(($question_item->q_type == 1)? $question_item->qt_id :$question_item->qt_id.'[]').'" id="'.$temp_id .'"/>';
                 echo '<label for="'.$temp_id .'">'.$option.'</label></td></tr>';
                 $option_index ++;
             }
@@ -100,7 +114,6 @@ require "header.html";
                     }
                     else if(data == 1)
                     {
-                        $("#result").after("focus!");
                         $("form:first").submit();
                         return;
                     }
@@ -118,14 +131,12 @@ require "header.html";
         });
 
         function is_submit_enable(){
-            if($(":checked").length == 2){
-                if($('div.q_container:not(:has(:checked))').length == 0){
-                    $("input[name=submitanswer]").removeAttr("disabled").css({"background-color":"#FF6162", "color":"#ffffff"});
-                }
-                else
-                {
-                    $("input[name=submitanswer]").attr("disabled","disable").css({"background-color":"", "color":"#000000"});
-                }
+            if($('div.q_container:not(:has(:checked))').length == 0){
+                $("input[name=submitanswer]").removeAttr("disabled").css({"background-color":"#FF6162", "color":"#ffffff"});
+            }
+            else
+            {
+                $("input[name=submitanswer]").attr("disabled","disable").css({"background-color":"", "color":"#000000"});
             }
         };
     });

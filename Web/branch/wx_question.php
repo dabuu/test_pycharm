@@ -19,37 +19,37 @@ class wx_question {
         $this->q_context = $this->db_rst_row['q_context'];
         $this->q_type = $this->db_rst_row['q_type'];
         $this->q_explain = $this->db_rst_row['q_explain'];
-//        $this->q_answer = $this->db_rst_row['q_answer_id'];
+        $this->q_answer = $this->db_rst_row['q_answer_id'];
         $this->GetOptionsAndAnswers();
     }
 
     private function GetOptionsAndAnswers()
     {
         $this->q_options = explode("{#$}",$this->db_rst_row['q_options']);
-        $this->Answer2Bin(explode("{#$}",$this->db_rst_row['q_answer_id']));
+//        $this->Answer2Bin(explode("{#$}",$this->db_rst_row['q_answer_id']));
     }
-
-    // 结果都是 -1
-    private function Answer2Bin($array_answer_id)
-    {
-        $this->q_answer = "";
-
-        foreach ($array_answer_id as $key=>$value) {
-            $array_answer_id[$key] = decbin(intval($value)-1);
-        }
-        $this->q_answer = implode("#", $array_answer_id);
-    }
-    // 转换之后的结果都是 +1
-    public static function Answer2Dec($answer_str)
-    {
-        $array_temp_answer = explode("#",$answer_str);
-
-        foreach ($array_temp_answer as $key=>$value) {
-            $array_temp_answer[$key] = bindec(strval($value)) + 1;
-        }
-
-        return implode("#",$array_temp_answer);
-    }
+//
+//    // 结果都是 -1
+//    private function Answer2Bin($array_answer_id)
+//    {
+//        $this->q_answer = "";
+//
+//        foreach ($array_answer_id as $key=>$value) {
+//            $array_answer_id[$key] = decbin(intval($value)-1);
+//        }
+//        $this->q_answer = implode("#", $array_answer_id);
+//    }
+//    // 转换之后的结果都是 +1
+//    public static function Answer2Dec($answer_str)
+//    {
+//        $array_temp_answer = explode("#",$answer_str);
+//
+//        foreach ($array_temp_answer as $key=>$value) {
+//            $array_temp_answer[$key] = bindec(strval($value)) + 1;
+//        }
+//
+//        return implode("#",$array_temp_answer);
+//    }
 
 
 }
