@@ -7,11 +7,10 @@
  * Time: 下午5:00
  */
 
-$page_title = "会计答题";
-require "header.html";
+
 if(!isset($_GET['uid']) || empty($_GET['uid']))
 {
-    echo "欢迎使用";
+    echo "Welcome!";
     exit;
 }
 
@@ -28,11 +27,12 @@ $user = new \sf_wx_questions\wx_user($user_id);
 $has_answered = $user->HasAnswerQuestionToday(); // 是否已经答题，如果回答过 直接展示 答案。
 if($has_answered)
 {
-    header("Location: ./wx_answer.php?uid=".$user_id);
-    exit;
+    //    header("Location: ./wx_answer.php?uid=".$user_id);
+    //exit;
 }
 
-
+$page_title = "会计答题";
+require "header.html";
 
 
 

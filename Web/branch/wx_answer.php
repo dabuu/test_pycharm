@@ -48,14 +48,15 @@ if(isset($_POST) && !empty($_POST))
 ?>
 <style>
     .banner{
-        background: url("./<?php echo $any_post ? "aande.png" : "kjyjcs.png"; ?>"), no-repeat;
+        background: url("./<?php echo $any_post ? "aande.png" : "kjyjcs.png"; ?>") no-repeat;
+        background-position: center;
     }
 </style>
 <body>
 <div class="maindiv" align="center">
     <div class="banner_container" >
         <div class="banner">
-            <img src="./<?php echo $any_post ? "aande.png" : "kjyjcs.png";?>" alt="<?php echo $any_post ? "答案以及解析" : "会计有奖问答";?>"/>
+
         </div>
     </div>
     <?php
@@ -128,15 +129,16 @@ if(isset($_POST) && !empty($_POST))
         ?>
 
         <div>邀请你的朋友来一决高下吧</div>
-        <p><img src="./sharebtn.png" alt="分享" id="sharebtn"/></p>
+        <p class="sharep"></p>
     </div>
 </div>
 </body>
 <SCRIPT type="text/javascript">
     $(document).ready(function(){
-        $("#sharebtn").click(function(){
+        $(".sharep").click(function(){
             $(".maindiv").before('<div><img src="./share_instr.png" alt="" id="share_instruction"/></div>');
         });
+
     });
 </SCRIPT>
 </html>

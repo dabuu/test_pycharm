@@ -19,9 +19,12 @@ define("LatestID","SELECT @@IDENTITY ;");
  *  User Operation in DB
  */
 define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
-define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`) VALUES ('%s', '%s');");
-define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
+define("FocusSFInfoUserWXId","SELECT `usr_id`,`focus_on_sf`  FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
+define("SetUserFocusOnStatus", "update `t_user` set `focus_on_sf`= %s where `usr_id` = %s ");
 define("HasFocusOnSF", "SELECT `focus_on_sf` FROM `t_user` where `usr_id` = %d;");
+define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`, `focus_on_sf`) VALUES ('%s', '%s');");
+define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
+
 
 /*
  *  Questions Operation in DB
@@ -104,6 +107,26 @@ class db_helper {
         return $answer_info_string;
     }
 
+    function UserFocusOnSF($user_id)// user's wx open id
+    {
+        $need_answer = false;
+        $result = $this->mysqli->query(sprintf(FocusSFInfoUserWXId, $user_id));
+        if($result->num_rows) // if user is in DB,
+        {
+            $result_temp_id = $result->fetch_array();
+            $temp_id = $result_temp_id[1]; //  $result_temp_id[1] is `focus_on_sf` = 1 is focus on
+            if($temp_id == 0) // check if user is focus on SF;  `focus_on_sf` = 0 is NOT focus on
+            {
+                $this->mysqli->query(sprintf(SetUserFocusOnStatus,1, $result_temp_id[0]));//  $result_temp_id[0] is `usr_id`, update user's status
+                return true;
+            }
+        }
+        else{ // if user is not in DB, he is a new user for SF by himself
+            $user_db_id = $this->InsertUser($user_id, 1);
+        }
+        return false;
+    }
+
     function QueryUserID($user_id)
     {
         $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id));
@@ -120,12 +143,12 @@ class db_helper {
                 //todo: log to warning;
             }
         }
-        return  $this->InsertUser($user_id);
+        return  $this->InsertUser($user_id, 0);
     }
-    private function InsertUser($user_id)
+    private function InsertUser($user_id, $focus_on)
     {
 
-        $this->mysqli->query(sprintf(InsertUserWXId, $user_id, sha1($user_id))); // insert a new user
+        $this->mysqli->query(sprintf(InsertUserWXId, $user_id, sha1($user_id), $focus_on)); // insert a new user
         $result = $this->mysqli->query(LatestID);
         $result_user = $result->fetch_array();
         return $result_user[0];
