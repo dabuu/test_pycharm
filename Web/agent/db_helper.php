@@ -39,7 +39,7 @@ class db_helper {
      */
     public function InsertAgent($user_name, $user_pwd)
     {
-        $rst = $this->mysqli->query(sprintf(InsertAgent,md5($user_name),$user_name, $user_pwd, md5($user_pwd)));
+        $this->mysqli->query(sprintf(InsertAgent,md5($user_name),$user_name, $user_pwd, md5($user_pwd)));
         if($this->mysqli->errno == 0)
         {
             return md5($user_name);
@@ -67,7 +67,20 @@ class db_helper {
 
     public function GetDupAgentName($name)
     {
-        $rst = $this->mysqli->query(sprintf())
+        $rst = $this->mysqli->query(sprintf(GetDupUserName, $name));
+        return ($rst->num_rows ==0)? false : true;
+    }
+
+    public function GetAgentToken($name, $pwd)
+    {
+        $rst = $this->mysqli->query(sprintf(GetAgentToken, $name,$pwd));
+        if($rst->num_rows)
+        {
+            $temp_row = $rst->fetch_assoc();
+            $rst->free();
+            return $temp_row[0];
+        }
+        return 0;
     }
 
     private function GetAgentDBID($token)
@@ -76,6 +89,7 @@ class db_helper {
         if($rst->num_rows)
         {
             $tmp_row = $rst->fetch_assoc();
+            $rst->free();
             return $tmp_row[0];
         }
         return -1;
@@ -83,8 +97,8 @@ class db_helper {
 
     public static function InsertPic2SaeStorage($desc_name, $files)
     {
-        //$ss = new SaeStorage();
-        //return $ss->upload('dabu',$desc_name,$_FILES['wx_pic']['tmp_name'])//把用户传到SAE的文件转存到名为test的storage
+        $ss = new SaeStorage();
+        return $ss->upload('dabu',$desc_name,$files['tmp_name']);//把用户传到SAE的文件转存到名为test的storage
     }
 }
 

@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td class="c_subject">订阅号二维码图片：</td>
-                        <td class="c_info"><input type="file" name="wx_pic"/></td>
+                        <td class="c_info"><input type="file" name="wx_pic" accept="image/*"/></td>
                     </tr>
                 </table>
 
