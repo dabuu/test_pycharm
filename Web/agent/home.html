@@ -39,6 +39,23 @@
                 switchBox('reg');
             });
             $("#create-btn").click(function(){
+                if($("#nick").val().length <3 ||$("#nick").val().length >20)
+                {
+                    alert("用户名长度在 3~20 字符之间");
+                    return;
+                }
+                if($("#password").val().length <4 || $("#password").val().length> 15)
+                {
+                    alert("密码长度在 4~15 字符之间");
+                    return;
+                }
+                if($("#password").val() != $("#password_confirm").val())
+                {
+                    alert("请输入一致的密码");
+                    return;
+                }
+                alert($("#sf_form").serialize());
+
                 $.ajax({
                     type:"post",
                     url: "regcheck.php",
@@ -64,6 +81,17 @@
             });
 
             $("#signin-form-submit").click(function(){
+                if($("#signin-email").val().length <3 ||$("#signin-email").val().length >20)
+                {
+                    alert("用户名长度在 3~20 字符之间");
+                    return;
+                }
+                if($("#signin-pw").val().length <4 || $("#signin-pw").val().length> 15)
+                {
+                    alert("密码长度在 4~15 字符之间");
+                    return;
+                }
+
                 $.ajax({
                     type:"post",
                     url: "regcheck.php",

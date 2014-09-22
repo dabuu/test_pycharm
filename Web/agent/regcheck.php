@@ -5,19 +5,20 @@
  * Date: 14-9-21
  * Time: 下午4:40
  */
-$response = array();
-$response['status'] = false;
-$response['content'] = "token出错，请退回去登录后继续填写!";
-$response['token'] = -1;
-echo json_encode($response);
-exit;
-
-require_once "db_helper.php";
+//$response = array();
+//$response['status'] = false;
+//$response['content'] = "token出错，请退回去登录后继续填写!";
+//$response['token'] = -1;
+//echo json_encode($response);
+//exit;
+//
+//require_once "db_helper.php";
 
 if(isset($_POST['name']))
 {
     $response = array();
     $response['status'] = false;
+
     // check token is valid;
     if(isset($_GET['token']) && !empty($_GET['token']))
     {
@@ -34,7 +35,7 @@ if(isset($_POST['name']))
         $mysql = new db_helper();
         if($mysql->GetAgentDBID($token) != -1)
         {
-            if(!empty($c_name) &&!empty( $c_province) &&!empty($c_city) &&
+            if(!empty($c_name) && !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
                 !empty($phone) &&!empty($charger) &&!empty($wx_name) && !empty($_FILES['wx_pic']))
             {
                 // step1: upload image and return NOT null path
@@ -84,7 +85,7 @@ if(isset($_POST["nick"]))
     $response['status'] = false;
 //    $response['status'] = true;
 //    $response['content'] ="登录成功";
-//    $response['content'] = "用户名已被使用！";
+    $response['content'] = "用户名已被使用！";
 //    $response['content'] = "密码不一致";
     $response['token'] = "1qaz2wssx";
     echo json_encode($response);
@@ -113,8 +114,9 @@ if(isset($_POST["nick"]))
         {
             $response['content'] = "密码不一致";
         }
-        echo json_encode($response);
     }
+    echo json_encode($response);
+    exit;
 }
 
 if(isset($_POST['username']))

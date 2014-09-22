@@ -7,11 +7,6 @@
     <script type="application/javascript" src="../jquery/geo.js"></script>
     <script type="application/javascript">
 
-//        function GetQueryString(name) {
-//            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
-//            var r = window.location.search.substr(1).match(reg);
-//            if (r!=null) return (r[2]); return null;
-//        }
         var time = 3;
         var set_time = "";
         function NavPage(content, page, element)
@@ -32,8 +27,9 @@
                     type:"post",
                     url: "regcheck.php",
                     dataType:"json",
-                    data:$("details_form").serialize(),
+                    data:$("#details_form").serialize(),
                     success:function(data){
+
                         if(data.status) // take token
                         {
                             set_time = setInterval(function(){
@@ -57,7 +53,7 @@
                         }
                     },
                     error:function(XMLHttpRequest, textStatus, errorThrown){
-                        alert(errorThrown);
+                        alert(errorThrown+"服务器出错，请重新尝试提交！");
                     }
                 });
             });
