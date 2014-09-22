@@ -1,18 +1,23 @@
 <?php
-//if(!isset($_GET['token']) || empty($_GET['token']))
-//{
-//    header("Location: http://home.php");
-//    exit;
-//}
-//include "wx_user.php";
-//include "questions.php";
-//
-//// todo: get user_guid
-//$user_id = $_GET['token'];
-////$user_id = "9877655";
 
 $page_title = "微信会计答题配置|统计平台";
 require_once "header.html";
+
+//require_once "db_helper.php";
+//$mysql = new db_helper();
+//if(isset($_GET['token']) && !empty($_GET['token']))
+//{
+//    if($mysql->GetAgentDBID($_GET['token']) == -1)
+//    {
+//        header("Location: home.html");
+//    }
+//}
+//else
+//{
+//    header("Location: home.html");
+//}
+//$token = $_GET['token'];
+
 ?>
     <div class="head" id="header">
         <div class="head_box">
@@ -24,10 +29,12 @@ require_once "header.html";
                 <div class="account">
                     <div class="account_meta account_info account_meta_primary">
                         //todo: user's name
-                        <?php echo "user name" ?>
+                        <?php
+                            echo $mysql->GetAgentName($token);
+                        ?>
                     </div>
                     <div class="account_meta account_logout account_meta_primary">
-                        <a id="logout" href="#">
+                        <a id="logout" href="home.html">
                             退出</a></div>
                 </div>
             </div>

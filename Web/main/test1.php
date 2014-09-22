@@ -1,44 +1,33 @@
 <?php
 
-function encrypt($string,$operation,$key=''){
-    $key=md5($key);
-    $key_length=strlen($key);
-    $string=$operation=='D'?base64_decode($string):substr(md5($string.$key),0,8).$string;
-    $string_length=strlen($string);
-    $rndkey=$box=array();
-    $result='';
-    for($i=0;$i<=255;$i++){
-        $rndkey[$i]=ord($key[$i%$key_length]);
-        $box[$i]=$i;
-    }
-    for($j=$i=0;$i<256;$i++){
-        $j=($j+$box[$i]+$rndkey[$i])%256;
-        $tmp=$box[$i];
-        $box[$i]=$box[$j];
-        $box[$j]=$tmp;
-    }
-    for($a=$j=$i=0;$i<$string_length;$i++){
-        $a=($a+1)%256;
-        $j=($j+$box[$a])%256;
-        $tmp=$box[$a];
-        $box[$a]=$box[$j];
-        $box[$j]=$tmp;
-        $result.=chr(ord($string[$i])^($box[($box[$a]+$box[$j])%256]));
-    }
-    if($operation=='D'){
-        if(substr($result,0,8)==substr(md5(substr($result,8).$key),0,8)){
-            return substr($result,8);
-        }else{
-            return'';
-        }
-    }else{
-        return str_replace('=','',base64_encode($result));
-    }
-}
-$str = 'dabuwang';
-echo '<br/>md5：'.md5($str);
+//$test = array();
+//
+//$test[] = 1;
+//$test[] = 1;
+//$test[] = 1;
+//
+////$test[1] = 1;
+////$test[2] = 1;
+////$test[3] = 1;
+//
+//echo json_encode($test);
+//exit;
 
-echo '<br/>sha1：'.sha1('123456');
+$test_array = array();
+//$test_array['status'] = false;
+$test_array['user'] = "10010";
+$test_array['answers'][] = array("question_id"=>11, "answer"=>"1{#$}2", "is_correct"=> 1);
+$test_array['answers'][] = array("question_id"=>22, "answer"=>"3", "is_correct"=> 0);
+//$test_array['data']['focus'] = 1;
+//$test_array['data']['today'] = 4;
+//$test_array['data']['total'] = 100;
+//$test_array['data']['today_rate'] = 80;
+
+echo json_encode($test_array);
+
+
+
+
 
 
 ?>

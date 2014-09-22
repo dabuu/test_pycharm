@@ -20,6 +20,7 @@ define("InsertAgentDetails","INSERT INTO `app_dabuu`.`t_agent_detail` (`f_agent_
  `agetor_phone`, `agentor_name`, `wx_name`, `wx_pic`, `cmt`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')");
 define("GetAgentToken","SELECT `a_nick_name_md5` FROM `t_agent`where `a_nick_name`= '%s' and `a_pwd` =  '%s'");
 define("GetAgentDBID","SELECT `agent_id` FROM `t_agent`where `a_nick_name_md5`= '%s'");
+define("GetAgentName","SELECT `a_nick_name` FROM `t_agent`where `a_nick_name_md5`= '%s'");
 define("GetDupUserName", "SELECT `agent_id` FROM `t_agent`where `a_nick_name`= '%s'");
 
 
@@ -83,9 +84,21 @@ class db_helper {
         return 0;
     }
 
-    private function GetAgentDBID($token)
+    public function GetAgentDBID($token)
     {
         $rst = $this->mysqli->query(sprintf(GetAgentDBID,$token));
+        if($rst->num_rows)
+        {
+            $tmp_row = $rst->fetch_assoc();
+            $rst->free();
+            return $tmp_row[0];
+        }
+        return -1;
+    }
+
+    public function GetAgentName($token)
+    {
+        $rst = $this->mysqli->query(sprintf(GetAgentName,$token));
         if($rst->num_rows)
         {
             $tmp_row = $rst->fetch_assoc();

@@ -6,7 +6,61 @@
     <script language="javascript" type="text/javascript" src="../jquery/jquery-1.11.1.min.js"></script>
     <script type="application/javascript" src="../jquery/geo.js"></script>
     <script type="application/javascript">
+
+//        function GetQueryString(name) {
+//            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+//            var r = window.location.search.substr(1).match(reg);
+//            if (r!=null) return (r[2]); return null;
+//        }
+        var time = 3;
+        var set_time = "";
+        function NavPage(content, page, element)
+        {
+        //            alert(element);
+            var text = time + "秒后自动跳转";
+            time--;
+            $(element).html(content + ","+text);
+            if(time == 0)
+            {
+                window.location.href=page;
+                clearInterval(set_time);
+            }
+        }
         $(document).ready(function(){
+            $("#create-btn").click(function(){
+                $.ajax({
+                    type:"post",
+                    url: "regcheck.php",
+                    dataType:"json",
+                    data:$("details_form").serialize(),
+                    success:function(data){
+                        if(data.status) // take token
+                        {
+                            set_time = setInterval(function(){
+                                $("#details_response").css("color","black");
+                                NavPage(data.content, "d1setting.htm?token="+data.token, "#details_response");
+                            }, 900);
+                        }
+                        else
+                        {
+                            if(data.token == -1)
+                            {
+                                set_time = setInterval(function(){
+                                    $("#details_response").css("color","red");
+                                    NavPage(data.content, "home.html", "#details_response");
+                                }, 900);
+                            }
+                            else{
+                                $("#details_response").html(data.content).css("color","red");
+                            }
+
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            });
         });
     </script>
 </head>
@@ -16,7 +70,7 @@
         </h1>
     <div id="main">
         <div id="reg-box" >
-            <form class="reg-bg" method="post" action="#" id="reg_form" autocomplete="off">
+            <form class="reg-bg" method="post" action="#" id="details_form">
                 <table>
                     <tr>
                         <td class="c_subject">公司名称：</td>
@@ -50,9 +104,10 @@
                         <td class="c_info"><input type="file" name="wx_pic"/></td>
                     </tr>
                 </table>
-
+                <div id="details_response"></div>
                 <div id="create_details">
-                    <button tabindex="7" id="create-btn" class="green-btn" type="submit"><span>完成</span></button>
+                    <!--<button tabindex="7" id="create-btn" class="green-btn" type="submit"><span>完成</span></button>-->
+                    <input type="button" value="完成" name="register" id="create-btn" class="green-btn" />
                 </div>
             </form>
         </div>

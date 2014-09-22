@@ -39,58 +39,6 @@
                 </tr>
             </table>
         </div>
-        <div class="q_container">
-            <p>2是xXXXXXXXXXXXXXX</p>
-            <table class="q_container_table">
-                <tr>
-                    <td class="left_label"><span>A</span></td>
-                    <td class="right_option">
-                        <input type="checkbox" value="1" name="23[]" id="B1"/>
-                        <label for="B1">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left_label"><span>B</span></td>
-                    <td class="right_option">
-                        <input type="checkbox" value="1" name="23[]" id="B2"/>
-                        <label for="B2">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left_label"><span>C</span></td>
-                    <td class="right_option">
-                        <input type="checkbox" value="1" name="23[]" id="B3"/>
-                        <label for="B3">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="q_container">
-            <p>3是xXXXXXXXXXXXXXX</p>
-            <table class="q_container_table">
-                <tr>
-                    <td class="left_label"><span>A</span></td>
-                    <td class="right_option">
-                        <input type="radio" value="1" name="C" id="C1"/>
-                        <label for="C1">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left_label"><span>B</span></td>
-                    <td class="right_option">
-                        <input type="radio" value="1" name="C" id="C2"/>
-                        <label for="C2">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left_label"><span>C</span></td>
-                    <td class="right_option">
-                        <input type="radio" value="1" name="C" id="C3"/>
-                        <label for="C3">某企业原材料按实际成本进行日常核算。2007年3月1日结存甲材料300公斤，</label>
-                    </td>
-                </tr>
-            </table>
-        </div>
         <input type="button" value="提交答案" name="submitanswer" id="submitanswer" disabled="disabled"/>
         <input type="hidden" value="user_db_id" name="info" id = "info"/>
         <!--用结果用 二进制数+0 表示：bindec,decbin -->
@@ -168,14 +116,18 @@
 //            return true;
             $("input#submitanswer").val("提交中...");
             $("input#submitanswer").attr("disabled","disable").css("background-color","");
+            alert($("form:first").serialize());
             $.ajax({
                 type:"post",
                 //url: "checkanswer.php",
-                url: "checkfocus.php",
-                dataType:"text",
-//                data:$("form:first").serialize(),
-                data:  { user_id: $("#info").val() },
+                url: "regcheck.php",
+                dataType:"json",
+                data:$("form:first").serialize(),
+//                data:  { user_id: $("#info").val() },
                 success:function(data){
+                    alert(data);
+                    alert(data.A);
+                    return;
                     if(data == 0)
                     {
                         $("#result").after("no focus!");

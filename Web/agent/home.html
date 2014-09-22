@@ -15,6 +15,22 @@
                 $('#login-box').animate({left:'9px'})
             }
         };
+
+        var time = 3;
+        var set_time = "";
+        function NavPage(content, page, element)
+        {
+//            alert(element);
+            var text = time + "秒后自动跳转";
+            time--;
+            $(element).html(content + ","+text).css("color","black");
+            if(time == 0)
+            {
+                window.location.href=page;
+                clearInterval(set_time);
+            }
+        }
+
         $(document).ready(function(){
             $('#login-link').click(function(){
                 switchBox();
@@ -22,6 +38,55 @@
             $('#reg-link').click(function(){
                 switchBox('reg');
             });
+            $("#create-btn").click(function(){
+                $.ajax({
+                    type:"post",
+                    url: "regcheck.php",
+                    dataType:"json",
+                    data:$("#sf_form").serialize(),
+                    success:function(data){
+                        if(data.status) // take token
+                        {
+                            set_time = setInterval(function(){
+                                NavPage(data.content, "details.html?token="+data.token, "#create_response");
+                            }, 900);
+
+                        }
+                        else
+                        {
+                            $("#create_response").html(data.content).css("color","red");
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            });
+
+            $("#signin-form-submit").click(function(){
+                $.ajax({
+                    type:"post",
+                    url: "regcheck.php",
+                    dataType:"json",
+                    data:$("#signin-form").serialize(),
+                    success:function(data){
+                        if(data.status) // take token
+                        {
+                            set_time = setInterval(function(){
+                                NavPage(data.content, "d1setting.htm?token="+data.token, "#signin_response");
+                            }, 900);
+                        }
+                        else
+                        {
+                            $("#signin_response").html(data.content).css("color","red");
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            });
+
         });
 
     </script>
@@ -34,7 +99,7 @@
     </header>
     <div id="main">
         <div id="reg-box" style="left: 9px;">
-            <form class="reg-bg" method="post" action="regcheck.php" id="sf_form" autocomplete="off">
+            <form class="reg-bg" method="post" action="" id="sf_form" >
                 <fieldset id="reg-field">
                     <ul>
                         <li>
@@ -54,14 +119,16 @@
                         </li>
                     </ul>
                 </fieldset>
+                <div id="create_response"></div>
                 <div id="create_account">
-                    <button id="create-btn" class="green-btn" name="register" type="submit"><span>注册</span></button>
+                    <!--<button id="create-btn" class="green-btn" name="register" type="submit"><span>注册</span></button>-->
+                    <input type="button" value="注册" name="register" id="create-btn" class="green-btn" />
                 </div>
                 <p id="have-id">已有管理帐号？<a id="login-link" href="#">点击登录</a></p>
             </form>
         </div>
         <div id="login-box" style="left: 550px;">
-            <form id="signin-form" class="reg-bg" method="post" action="regcheck.php" autocomplete="off">
+            <form id="signin-form" class="reg-bg" method="post" action="regcheck.php">
                 <ul id="signinform">
                     <li>
                         <label for="nick">昵　　称：</label>
@@ -73,7 +140,11 @@
                         <p class="errordata" style="display: none;">密码输入错误</p>
                     </li>
                 </ul>
-                <button title="点击登录" class="green-btn" id="signin-form-submit" name="signin" type="submit">登录</button>
+                <!--<button title="点击登录" class="green-btn" id="signin-form-submit" name="signin" type="submit">登录</button>-->
+                <div id="signin_response" style="float: left"></div>
+
+                    <input type="button" value="登录" name="signin" id="signin-form-submit" class="green-btn" />
+
             </form>
             <p id="user-reg">还没有管理帐号？<a id="reg-link" href="#">点击注册</a></p>
 
