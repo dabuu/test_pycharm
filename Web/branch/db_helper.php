@@ -33,7 +33,7 @@ define("GetQuestionsRandomlyAsNum", "SELECT * FROM `app_dabuu`.`t_questions` LIM
 define("GetTodayQuestionsDateTime","SELECT `t_questions_today`.`qt_id`,`t_questions`.*  FROM `t_questions_today` LEFT JOIN `t_questions` ON `t_questions`.`q_id` = `t_questions_today`.`f_question_id`
 WHERE DATE(`t_questions_today`.`qt_date`) = DATE(now()) ");
 define("GenerateTodayQuestions_TPL","INSERT INTO `app_dabuu`.`t_questions_today` (`f_question_id`) VALUES %s;"); // here %s could be "(2),(3),(4)"
-define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`,`rst_iscorrect`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
+define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`,`rst_iscorrect`,`rate`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
 define("SelectQuestionExplainByIDs", "SELECT `t_questions_today`.`qt_id`, `t_questions`.`q_answer_id`, `t_questions`.`q_explain` FROM `t_questions_today` left join `t_questions` on `t_questions`.`q_id` = `t_questions_today`.`f_question_id` where `t_questions_today`.`qt_id` in (%s))");
 define("SelectUserCorrectCountToday", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and DATE(`answer_time`) = DATE(now()) and `rst_iscorrect` = 1");
 define("SelectUserCorrectCountHistory", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and `rst_iscorrect` = 1");
@@ -53,14 +53,22 @@ class db_helper {
     {
         $rst_user_answer_count = $this->mysqli->query(sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id));
         $answer_count = $rst_user_answer_count->fetch_array();
-        return ($answer_count[0] == 0)? false : true; // if answer_count is 0, user don't answer questions today.
+        $rst_user_answer_count->free();
+        return ($answer_count[0] != 0); // if answer_count is 0, user don't answer questions today.
     }
 
     function HasFocusOnSFWX($u_db_id)
     {
         $rst_user_focus_status = $this->mysqli->query(sprintf(HasFocusOnSF,$u_db_id));
-        $user_focus_status = $rst_user_focus_status->fetch_array();
-        return $user_focus_status[0]; // if answer_count is 0, user don't answer questions today.
+        if($rst_user_focus_status->num_rows)
+        {
+            $user_focus_status = $rst_user_focus_status->fetch_array();
+            return $user_focus_status[0]; // if answer_count is 0, user don't answer questions today.
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     function SelectQuestionsInfoByIDs($question_ids)
@@ -107,7 +115,7 @@ class db_helper {
         return $answer_info_string;
     }
 
-    function UserFocusOnSF($user_id)// user's wx open id
+    function UserFocusOnSF($user_id)// user's wx_open id
     {
         $need_answer = false;
         $result = $this->mysqli->query(sprintf(FocusSFInfoUserWXId, $user_id));
@@ -125,6 +133,22 @@ class db_helper {
             $user_db_id = $this->InsertUser($user_id, 1);
         }
         return false;
+    }
+
+    function GetUserDBID($user_wx_id)
+    {
+        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_wx_id));
+        if($result->num_rows)
+        {
+            $result_temp_id = $result->fetch_array();
+            $temp_id = $result_temp_id[0];
+            if(is_numeric($temp_id))
+            {
+                $result->free();
+                return $temp_id;
+            }
+        }
+        return -1;
     }
 
     function QueryUserID($user_id)

@@ -13,6 +13,17 @@
 //echo json_encode($test);
 //exit;
 
+$sum = 0;
+function Add($count)
+{
+    $sum =0 ;
+    echo $sum = $sum + $count;
+}
+
+echo Add(10) ."<br/>";
+echo $sum;
+
+exit;
 $test_array = array();
 //$test_array['status'] = false;
 $test_array['user'] = "10010";
