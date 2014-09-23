@@ -13,6 +13,39 @@
 //echo json_encode($test);
 //exit;
 
+$temp_array = array();
+$temp_array [] = 10;
+$temp_array [] = 20;
+$temp_array [] = 30;
+
+$str = "1{#$}2";
+$temp = explode("{#$}", $str);
+
+if(in_array(1, $temp))
+{
+    echo "true";
+}
+else
+{
+    echo "false";
+}
+
+for($i=1;$i<count($temp_array);$i++)
+{
+    echo $temp_array[$i];
+}
+
+exit;
+$temp = array();
+$temp[] = 2;
+foreach ($temp as $value) {
+
+    $temp_array[$value] = 1111111;
+}
+
+print_r($temp_array);
+exit;
+
 $sum = 0;
 function Add($count)
 {

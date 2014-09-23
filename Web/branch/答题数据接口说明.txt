@@ -1,13 +1,16 @@
-﻿
-============================  获取题目 getquestioninfo.json  ============================
+﻿答题页面的url : question.html?aid=xxxxx&uid=wx_open_id
+
+============================  获取题目 getquestioninfo.json?agent=xxxx&token=wx_open_id  ============================
 {
 	"status":true,
 	"data":{
 		"user_id": 1010,
+		"is_answered": true; (这里 是显示 用户是否今天打过题了， 如果打过题了， 直接跳转到 结果页面， 如果今天没答题，则继续显示题目)
 		"questions":[
 			{
 				"id": 22,
 				"label":"这里是22题干这里是22题干这里是22题干这里是22题干这里是22题干",
+				"type";1, (这里 是题目的类型， type =1 单选， type=2 多选)
 				"answers":[
 					{
 						"label":"许久了"
@@ -27,6 +30,7 @@
 			{
 				"id": 44,
 				"label":"这里是44题干这里是44题干这里是44题干这里是44题干这里是44题干",
+				"type";2,
 				"answers":[
 					{
 						"label":"许久了"
@@ -76,7 +80,48 @@ q_22=3_0
 		"focus": 1,
 		"today": 4,
 		"total": 100,
-		"today_rate": 80
+		"today_rate": 80,
+		"questions":[  (这里是 结果里面显示解释的部分)
+        			{
+        				"id": 22,
+        				"label":"这里是22题干这里是22题干这里是22题干这里是22题干这里是22题干",
+        				"type";1,
+        				"explain":[
+        					{
+        						"label":"许久了"
+        					},
+        					{
+        						"label":"注意没注意",
+        					},
+        					{
+        						"label":"呼噜呼噜"
+        					},
+        					{
+        						"label":"嘘嘘"
+        					}
+        				]
+        			},
+        			{
+        				"id": 44,
+        				"label":"这里是44题干这里是44题干这里是44题干这里是44题干这里是44题干",
+        				"type";1,
+        				"explain":[
+        					{
+        						"label":"许久了"
+        					},
+        					{
+        						"label":"注意没注意",
+        					},
+        					{
+        						"label":"呼噜呼噜"
+        					},
+        					{
+        						"label":"嘘嘘"
+        					}
+        				]
+        			}
+
+        		]
 	}
 }
 status =true 正常返回， 

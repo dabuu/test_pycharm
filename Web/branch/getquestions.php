@@ -8,27 +8,36 @@
 
 //require_once "db_helper.php";
 
-
 $response = array();
 $response['status'] = false;
 $response['data'] = array();
 
-if(isset($_GET['token']) && !empty($_GET['token']))
+if(isset($_GET['aid']) && !empty($_GET['aid'])&& isset($_GET['uid']) && !empty($_GET['uid']))
 {
     require_once "db_helper.php";
     $mysql = new \sf_wx_questions\db_helper();
-
-
-    $user_db_id = $mysql->GetUserDBID($_GET['token']);
-    if($user_db_id != -1)
+    require_once "../agent/dba_helper.php";
+    $a_mysql = new dba_helper();
+    $agent_id = $a_mysql->GetAgentDBID($_GET['aid']);
+    if($agent_id  != -1)
     {
-        $response['status'] = true;
-        $response['data']['user_id'] = $user_db_id;
-        if(!$mysql->HasAnswerQuestionToday($user_db_id)) // 如果没答过题， question 内容为空
+        $user_db_id = $mysql->QueryUserID($_GET['uid'],$agent_id);
+        if($user_db_id != -1)
         {
-
+            $response['status'] = true;
+            $response['data']['user_id'] = $user_db_id;
+            if(!$mysql->HasAnswerQuestionToday($user_db_id)) // 如果没答过题， question 内容为空
+            {
+                $response['data']['is_answered'] = false;
+                $response['data']['questions'] = $mysql->GetTodayQuestions4Interface();
+            }
+            else{
+                $response['data']['is_answered'] = true;
+            }
         }
     }
+
+
 }
 echo json_encode($response);
 exit;

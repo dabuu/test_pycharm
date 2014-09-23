@@ -40,6 +40,7 @@ if(isset($_POST['user_id']) && !empty($_POST['user_id']))
                 $response['data']['today'] = $today_correct;
                 $response['data']['total'] = $mysql->GetUserHistoryCorrectNum($user_db_id);
                 $response['data']['today_rate'] = $rate;
+                $response['data']['questions'] = $mysql->GetTodayQuestions4Interface(true);
             }
         }
     }

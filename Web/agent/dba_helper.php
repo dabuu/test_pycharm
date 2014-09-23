@@ -27,7 +27,7 @@ define("GetDupUserName", "SELECT `agent_id` FROM `t_agent`where `a_nick_name`= '
 //user info
 
 
-class db_helper {
+class dba_helper {
     public $mysqli = null;
 
     function __construct()

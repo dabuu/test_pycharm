@@ -130,14 +130,30 @@ class wechatCallbackapiTest
         <Articles>%s</Articles>
         </xml>";//        <Content><![CDATA[]]></Content>
 
-        $itemTpl = "<item>
-        <Title><![CDATA[%s]]></Title>
-        <Description><![CDATA[%s]]></Description>
-        <PicUrl><![CDATA[%s]]></PicUrl>
-        <Url><![CDATA[%s?uid=%s]]></Url>
-        </item>";
+        if(isset($_GET['token']) && !empty($_GET['token']))
+        {
+            $itemTpl = "<item>
+            <Title><![CDATA[%s]]></Title>
+            <Description><![CDATA[%s]]></Description>
+            <PicUrl><![CDATA[%s]]></PicUrl>
+            <Url><![CDATA[%s?aid=%s&uid=%s]]></Url>
+            </item>";
 
-        $item_str = sprintf($itemTpl, "会计答题", "会计答题的描述", "http://2.dabuu.sinaapp.com/jiangbei.png", "http://2.dabuu.sinaapp.com/wx_exam.php", $object->FromUserName);
+            $item_str = sprintf($itemTpl, "会计答题", "会计答题的描述", "http://2.dabuu.sinaapp.com/jiangbei.png", "http://2.dabuu.sinaapp.com/wx_exam.php",$_GET['token'], $object->FromUserName);
+        }
+        else
+        {
+            $itemTpl = "<item>
+            <Title><![CDATA[%s]]></Title>
+            <Description><![CDATA[%s]]></Description>
+            <PicUrl><![CDATA[%s]]></PicUrl>
+            <Url><![CDATA[%s?uid=%s]]></Url>
+            </item>";
+
+            $item_str = sprintf($itemTpl, "会计答题", "会计答题的描述", "http://2.dabuu.sinaapp.com/jiangbei.png", "http://2.dabuu.sinaapp.com/wx_exam.php",$object->FromUserName);
+        }
+
+
         $result = sprintf($newsTpl, $object->FromUserName, $object->ToUserName, time(), $item_str);
         return $result;
     }

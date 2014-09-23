@@ -22,7 +22,7 @@ define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx
 define("FocusSFInfoUserWXId","SELECT `usr_id`,`focus_on_sf`  FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
 define("SetUserFocusOnStatus", "update `t_user` set `focus_on_sf`= %s where `usr_id` = %s ");
 define("HasFocusOnSF", "SELECT `focus_on_sf` FROM `t_user` where `usr_id` = %d;");
-define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`, `focus_on_sf`) VALUES ('%s', '%s');");
+define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`, `focus_on_sf`,`f_agent_id`) VALUES ('%s', '%s','%s','%s');");
 define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
 
 
@@ -130,7 +130,7 @@ class db_helper {
             }
         }
         else{ // if user is not in DB, he is a new user for SF by himself
-            $user_db_id = $this->InsertUser($user_id, 1);
+            $user_db_id = $this->InsertUser($user_id, 1,0);
         }
         return false;
     }
@@ -151,9 +151,9 @@ class db_helper {
         return -1;
     }
 
-    function QueryUserID($user_id)
+    function QueryUserID($user_wx_id,$f_agent_id)
     {
-        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_id));
+        $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_wx_id));
         if($result->num_rows)
         {
             $result_temp_id = $result->fetch_array();
@@ -167,12 +167,12 @@ class db_helper {
                 //todo: log to warning;
             }
         }
-        return  $this->InsertUser($user_id, 0);
+        return  $this->InsertUser($user_wx_id, 0,$f_agent_id);
     }
-    private function InsertUser($user_id, $focus_on)
+    private function InsertUser($user_wx_id, $focus_on,$f_agent_id)
     {
 
-        $this->mysqli->query(sprintf(InsertUserWXId, $user_id, sha1($user_id), $focus_on)); // insert a new user
+        $this->mysqli->query(sprintf(InsertUserWXId, $user_wx_id, sha1($user_wx_id), $focus_on,$f_agent_id)); // insert a new user
         $result = $this->mysqli->query(LatestID);
         $result_user = $result->fetch_array();
         return $result_user[0];
@@ -198,8 +198,27 @@ class db_helper {
         return $this->mysqli->errno;
     }
 
-    // return an array of class question
+    function GetTodayQuestions4Interface($is_explain=false)
+    {
+        $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime);
+        if($qt_rst->num_rows != 5) // if today there is NOT 5 questions, generate first
+        {
+            $this->GetRandomQuestionsIDArray(5);
+            $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime);
+        }
 
+        include "i_question.php";
+        $question_array = array();
+        while($rst_row= $qt_rst->fetch_array())
+        {
+            $temp_q = new i_question($rst_row, $is_explain);
+            $question_array[] =$temp_q;
+        }
+        $qt_rst->free();
+        return $question_array;
+    }
+
+    // return an array of class question
     function GetTodayQuestions()
     {
         $qt_rst = $this->mysqli->query(GetTodayQuestionsDateTime);

@@ -12,7 +12,7 @@
 //echo json_encode($response);
 //exit;
 //
-//require_once "db_helper.php";
+require_once "dba_helper.php";
 
 if(isset($_POST['name']))
 {
@@ -32,14 +32,14 @@ if(isset($_POST['name']))
         $charger = trim($_POST['charger']);
         $wx_name = trim($_POST['wx_id']);
         //todo: check $token is valid or not
-        $mysql = new db_helper();
+        $mysql = new dba_helper();
         if($mysql->GetAgentDBID($token) != -1)
         {
             if(!empty($c_name) && !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
                 !empty($phone) &&!empty($charger) &&!empty($wx_name) && !empty($_FILES['wx_pic']))
             {
                 // step1: upload image and return NOT null path
-                $file_path = db_helper::InsertPic2SaeStorage($token."png",$_FILES['wx_pic']);
+                $file_path = dba_helper::InsertPic2SaeStorage($token."png",$_FILES['wx_pic']);
                 if($file_path)
                 {
                     // step2: update DB data;
@@ -94,7 +94,7 @@ if(isset($_POST["nick"]))
     {
         if(strcmp($pwd,$pwd_confirm) == 0) // 比较 相等， 继续
         {
-            $mysql = new db_helper();
+            $mysql = new dba_helper();
             if(!$mysql->GetDupAgentName($user_name))
             {
                 $token = $mysql->InsertAgent($user_name,$pwd);
@@ -136,7 +136,7 @@ if(isset($_POST['username']))
     //todo: 检查 是否 填写详细信息
     if(!empty($user_name ) && !empty($pwd ))
     {
-        $mysql = new db_helper();
+        $mysql = new dba_helper();
         $token = $mysql->GetAgentToken($user_name, $pwd);
         //check user's valid
         if($token)

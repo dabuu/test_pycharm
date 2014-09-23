@@ -16,7 +16,7 @@ $user_id = $_GET['uid'];
 // todo: get user_guid
 //$user_id = "9877655";
 
-$user = new \sf_wx_questions\wx_user($user_id);
+$user = new \sf_wx_questions\wx_user($user_id, $_GET['aid']);
 $mysql = new \sf_wx_questions\db_helper();
 
 $today_questions_info = new \sf_wx_questions\questions(5);

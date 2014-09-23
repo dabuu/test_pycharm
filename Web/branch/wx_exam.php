@@ -22,7 +22,7 @@ include "questions.php";
 $user_id = $_GET['uid'];
 //$user_id = "9877655";
 
-$user = new \sf_wx_questions\wx_user($user_id);
+$user = new \sf_wx_questions\wx_user($user_id,$_GET['aid']);
 
 $has_answered = $user->HasAnswerQuestionToday(); // 是否已经答题，如果回答过 直接展示 答案。
 if($has_answered)

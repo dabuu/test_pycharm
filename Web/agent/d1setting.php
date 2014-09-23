@@ -3,8 +3,8 @@
 $page_title = "微信会计答题配置|统计平台";
 require_once "header.html";
 
-//require_once "db_helper.php";
-//$mysql = new db_helper();
+//require_once "dba_helper.php";
+//$mysql = new dba_helper();
 //if(isset($_GET['token']) && !empty($_GET['token']))
 //{
 //    if($mysql->GetAgentDBID($_GET['token']) == -1)
