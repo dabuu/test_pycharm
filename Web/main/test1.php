@@ -12,6 +12,29 @@
 //
 //echo json_encode($test);
 //exit;
+$cc = "aaaa";
+echo !empty($cc);
+
+if(!empty($c_name) && !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
+    !empty($phone) &&!empty($charger) &&!empty($wx_name) )
+{
+    echo 1;
+}
+else
+{
+    echo 0;
+}
+exit;
+//
+//&& !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
+//!empty($phone) &&!empty($charger) &&!empty($wx_name) && !empty($_FILES['wx_pic']
+
+for ($i=0; $i<7; $i++)
+{
+    echo date("Y-m-d", strtotime($i." days ago")).'<br />';
+}
+
+exit;
 
 $temp_array = array();
 $temp_array [] = 10;

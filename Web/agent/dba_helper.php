@@ -23,9 +23,10 @@ define("GetAgentDBID","SELECT `agent_id` FROM `t_agent`where `a_nick_name_md5`= 
 define("GetAgentName","SELECT `a_nick_name` FROM `t_agent`where `a_nick_name_md5`= '%s'");
 define("GetDupUserName", "SELECT `agent_id` FROM `t_agent`where `a_nick_name`= '%s'");
 
-
 //user info
-
+define("GetTotalUserCountByToken", "SELECT count(*) as user_count FROM `t_agent` join `t_user` on `t_user`.`f_agent_id` = `t_agent`.`agent_id` where `a_nick_name_md5` = '%s'");
+define("GetLast7DaysUserCountByToken", "SELECT Date(`t_user`.`latest_update_time`) as uDate,count(*) as user_count FROM `t_agent` join `t_user` on `t_user`.`f_agent_id` = `t_agent`.`agent_id` where `a_nick_name_md5` = '%s' and`t_user`.`latest_update_time` > date_add(now(), interval -7 day) group by Date(`t_user`.`latest_update_time`) order by Date(`t_user`.`latest_update_time`) Desc ");
+define("GetLast7DaysUserCountAndAnswersGroupByDateByToken", " SELECT  Date(`t_results`.`answer_time`) as rDate,count(`t_results`.`rst_iscorrect`) as answer_count ,round(sum(`t_results`.`rst_iscorrect`)/count(`t_results`.`rst_iscorrect`)*100, 2) as correct_rate FROM `t_agent` join `t_user` on `t_user`.`f_agent_id` = `t_agent`.`agent_id` join `t_results` on `t_user`.`usr_id` = `t_results`.`f_user_id` where `a_nick_name_md5` = '%s' and `t_results`.`answer_time` > date_add(now(), interval -7 day) group by Date(`t_results`.`answer_time`) order by Date(`t_results`.`answer_time`) Desc");
 
 class dba_helper {
     public $mysqli = null;
@@ -89,7 +90,7 @@ class dba_helper {
         $rst = $this->mysqli->query(sprintf(GetAgentDBID,$token));
         if($rst->num_rows)
         {
-            $tmp_row = $rst->fetch_assoc();
+            $tmp_row = $rst->fetch_array();
             $rst->free();
             return $tmp_row[0];
         }
@@ -101,18 +102,65 @@ class dba_helper {
         $rst = $this->mysqli->query(sprintf(GetAgentName,$token));
         if($rst->num_rows)
         {
-            $tmp_row = $rst->fetch_assoc();
+            $tmp_row = $rst->fetch_array();
             $rst->free();
             return $tmp_row[0];
         }
         return -1;
     }
 
+    public function GetTotalUserCountByAgentToken($agent_token)
+    {
+        $rst = $this->mysqli->query(sprintf(GetTotalUserCountByToken,$agent_token));
+        if($rst->num_rows)
+        {
+            $tmp_value = $rst->fetch_array();
+            $rst->free();
+            return $tmp_value;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    public function GetLast7DaysUserCountByToken($agent_token)
+    {
+        $rst = $this->mysqli->query(sprintf(GetLast7DaysUserCountByToken,$agent_token));
+
+        $daily_user_info = array();
+        while($rst_row = $rst->fetch_array())
+        {
+            $daily_user_info[$rst_row['uDate']] = $rst_row['user_count'];
+        }
+        $rst->free();
+        return $daily_user_info;
+    }
+
+    public function GetLast7DaysAnswerInfoByToken($agent_token)
+    {
+        $rst = $this->mysqli->query(sprintf(GetLast7DaysUserCountAndAnswersGroupByDateByToken,$agent_token));
+
+        $daily_answer_info = array();
+        while($rst_row = $rst->fetch_array())
+        {
+            $temp_array = array();
+            $temp_array['answer_count'] = $rst_row['answer_count'];
+            $temp_array['correct_rate'] = $rst_row['correct_rate'];
+
+            $daily_answer_info[$rst_row['rDate']] = $temp_array;
+        }
+        $rst->free();
+        return $daily_answer_info;
+    }
+
+
     public static function InsertPic2SaeStorage($desc_name, $files)
     {
         $ss = new SaeStorage();
         return $ss->upload('dabu',$desc_name,$files['tmp_name']);//把用户传到SAE的文件转存到名为test的storage
     }
+
 }
 
 ?>

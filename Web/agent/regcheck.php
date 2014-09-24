@@ -1,4 +1,10 @@
 <?php
+
+print_r($_POST);
+echo "<br/>";
+print_r($_FILES['wx_pic']);
+exit;
+
 /**
  * Created by PhpStorm.
  * User: dabuwang
@@ -20,9 +26,9 @@ if(isset($_POST['name']))
     $response['status'] = false;
 
     // check token is valid;
-    if(isset($_GET['token']) && !empty($_GET['token']))
+    if(isset($_POST['token']) && !empty($_POST['token']))
     {
-        $token = $_GET['token'];
+        $token = $_POST['token'];
         $response['token'] = $token ;
 
         $c_name = trim($_POST['name']);
@@ -59,7 +65,7 @@ if(isset($_POST['name']))
             }
             else
             {
-                $response['content'] = "请填写完整信息!";
+                $response['content'] = "请填写完整信息!".$c_name.$c_province.$c_city.$phone.$charger.$wx_name.$_FILES['wx_pic']['name'];
             }
         }
         else
@@ -83,13 +89,13 @@ if(isset($_POST["nick"]))
     $pwd_confirm = trim($_POST['password_confirm']);
     $response = array();
     $response['status'] = false;
-//    $response['status'] = true;
-//    $response['content'] ="登录成功";
-    $response['content'] = "用户名已被使用！";
-//    $response['content'] = "密码不一致";
-    $response['token'] = "1qaz2wssx";
-    echo json_encode($response);
-    exit;
+////    $response['status'] = true;
+////    $response['content'] ="登录成功";
+//    $response['content'] = "用户名已被使用！";
+////    $response['content'] = "密码不一致";
+//    $response['token'] = "1qaz2wssx";
+//    echo json_encode($response);
+//    exit;
     if(!empty($user_name) && !empty($pwd)&& !empty($pwd_confirm))
     {
         if(strcmp($pwd,$pwd_confirm) == 0) // 比较 相等， 继续
@@ -124,14 +130,14 @@ if(isset($_POST['username']))
     $user_name = trim($_POST['username']);
     $pwd = trim($_POST['password']);
     $response = array();
-//    $response['status'] = false;
-//    $response['content'] = "请输入正确的用户名密码！";
-    $response['status'] = true;
-    $response['content'] ="登录成功";
-
-    $response['token'] = "3qaz4wssx";
-    echo json_encode($response);
-    exit;
+    $response['status'] = false;
+////    $response['content'] = "请输入正确的用户名密码！";
+//    $response['status'] = true;
+//    $response['content'] ="登录成功";
+//
+//    $response['token'] = "3qaz4wssx";
+//    echo json_encode($response);
+//    exit;
 
     //todo: 检查 是否 填写详细信息
     if(!empty($user_name ) && !empty($pwd ))

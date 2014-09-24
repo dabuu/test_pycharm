@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>详细信息</title>
     <link rel="stylesheet" type="text/css" href="../css/home.css" />
     <script language="javascript" type="text/javascript" src="../jquery/jquery-1.11.1.min.js"></script>
     <script type="application/javascript" src="../jquery/geo.js"></script>
     <script type="application/javascript">
 
+        function getQueryStringByName(name){
+            var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+            if(result == null || result.length < 1){
+                return "";
+            }
+            return result[1];
+        }
+
         var time = 3;
         var set_time = "";
         function NavPage(content, page, element)
         {
-        //            alert(element);
+            //            alert(element);
             var text = time + "秒后自动跳转";
             time--;
             $(element).html(content + ","+text);
@@ -23,11 +32,45 @@
         }
         $(document).ready(function(){
             $("#create-btn").click(function(){
+
+                if($("#name").val().length <3 ||$("#name").val().length >20)
+                {
+                    alert("公司名称长度在 3~20 字符之间!");
+                    return;
+                }
+
+                if($("#phone").val().length <11 || $("#phone").val().length >15)
+                {
+                    alert("请填写正确的联系电话!");
+                    return;
+                }
+
+                if($("#charger").val() == "")
+                {
+                    alert("请输入负责人名称!")
+                    return;
+                }
+
+                if($("#wx_id").val() == "")
+                {
+                    alert("请输入订阅号名称!")
+                    return;
+                }
+
+                if($("input:file").val() == "")
+                {
+                    alert("请选择订阅号二维码图片!")
+                    return;
+                }
+
+                $post_data = $("#details_form").serializeArray();
+                $post_data.push({name:'token', value:getQueryStringByName('token')});
+
                 $.ajax({
                     type:"post",
                     url: "regcheck.php",
                     dataType:"json",
-                    data:$("#details_form").serialize(),
+                    data:$post_data,
                     success:function(data){
 
                         if(data.status) // take token
@@ -61,52 +104,53 @@
     </script>
 </head>
 <body onload="setup();">
-        <h1 class="logo">
-            请完善详细信息
-        </h1>
-    <div id="main">
-        <div id="reg-box" >
-            <form class="reg-bg" method="post" action="#" id="details_form">
-                <table>
-                    <tr>
-                        <td class="c_subject">公司名称：</td>
-                        <td class="c_info"><input tabindex="1" id="name" type="text" name="name" size="20" maxlength="20"></td>
-                    </tr>
-                    <tr>
-                        <td class="c_subject">公司所在地：</td>
-                        <td class="c_info">
-                            <select class="select" name="province" id="s1" tabindex="2" >
-                                <option></option>
-                            </select>
-                            <select class="select" name="city" id="s2" tabindex="3" >
-                                <option></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="c_subject">电话：</td>
-                        <td class="c_info"><input  tabindex="4" id="phone" type="text" name="phone" size="20" maxlength="20"></td>
-                    </tr>
-                    <tr>
-                        <td class="c_subject">负责人：</td>
-                        <td class="c_info"><input tabindex="5"  id="charger" type="text" name="charger" size="20" maxlength="20"></td>
-                    </tr>
-                    <tr>
-                        <td class="c_subject">订阅号名称：</td>
-                        <td class="c_info"><input  tabindex="6"  id="wx_id" type="text" name="wx_id" size="20" maxlength="20"></td>
-                    </tr>
-                    <tr>
-                        <td class="c_subject">订阅号二维码图片：</td>
-                        <td class="c_info"><input type="file" name="wx_pic"/></td>
-                    </tr>
-                </table>
-                <div id="details_response"></div>
-                <div id="create_details">
-                    <!--<button tabindex="7" id="create-btn" class="green-btn" type="submit"><span>完成</span></button>-->
-                    <input type="button" value="完成" name="register" id="create-btn" class="green-btn" />
-                </div>
-            </form>
-        </div>
+<h1 class="logo">
+    请完善详细信息
+</h1>
+<div id="main">
+    <div id="reg-box" >
+        <form class="reg-bg" id="details_form" enctype="multipart/form-data" action="#" method="post" autocomplete="off">
+            <table>
+                <tr>
+                    <td class="c_subject">公司名称：</td>
+                    <td class="c_info"><input tabindex="1" id="name" type="text" name="name" size="20" maxlength="20"></td>
+                </tr>
+                <tr>
+                    <td class="c_subject">公司所在地：</td>
+                    <td class="c_info">
+                        <select class="select" name="province" id="s1" tabindex="2" >
+                            <option></option>
+                        </select>
+                        <select class="select" name="city" id="s2" tabindex="3" >
+                            <option></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="c_subject">电话：</td>
+                    <td class="c_info"><input  tabindex="4" id="phone" type="text" name="phone" size="20" maxlength="20"></td>
+                </tr>
+                <tr>
+                    <td class="c_subject">负责人：</td>
+                    <td class="c_info"><input tabindex="5"  id="charger" type="text" name="charger" size="20" maxlength="20"></td>
+                </tr>
+                <tr>
+                    <td class="c_subject">订阅号名称：</td>
+                    <td class="c_info"><input  tabindex="6"  id="wx_id" type="text" name="wx_id" size="20" maxlength="20"></td>
+                </tr>
+                <tr>
+                    <td class="c_subject">订阅号二维码图片：</td>
+                    <td class="c_info"><input type="file" name="wx_pic" accept="image/*"/></td>
+                </tr>
+            </table>
+            <div id="details_response"></div>
+            <div id="create_details">
+                <!--<button tabindex="7" id="create-btn" class="green-btn" type="submit"><span>完成</span></button>-->
+                <input type="button" value="完成" name="register" id="create-btn" class="green-btn" />
+                <input type="hidden" name="token" id="token" value=""/>
+            </div>
+        </form>
     </div>
+</div>
 </body>
 </html>
