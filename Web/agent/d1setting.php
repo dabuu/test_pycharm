@@ -3,20 +3,20 @@
 $page_title = "微信会计答题配置|统计平台";
 require_once "header.html";
 
-//require_once "dba_helper.php";
-//$mysql = new dba_helper();
-//if(isset($_GET['token']) && !empty($_GET['token']))
-//{
-//    if($mysql->GetAgentDBID($_GET['token']) == -1)
-//    {
-//        header("Location: home.html");
-//    }
-//}
-//else
-//{
-//    header("Location: home.html");
-//}
-//$token = $_GET['token'];
+require_once "dba_helper.php";
+$mysql = new dba_helper();
+if(isset($_GET['token']) && !empty($_GET['token']))
+{
+    if($mysql->GetAgentDBID($_GET['token']) == -1)
+    {
+        header("Location: home.html");
+    }
+}
+else
+{
+    header("Location: home.html");
+}
+$token = $_GET['token'];
 
 ?>
     <div class="head" id="header">
@@ -53,22 +53,22 @@ require_once "header.html";
                         <dt class="menu_title"><i class="icon_menu" style="background: url(./img/icon_menu_statistics.png) no-repeat;">
                             </i>统计</dt>
                         <dd class="menu_item ">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d2summery.php?token=".$token ?>">
                                 用户答题统计</a></dd>
                     </dl>
                     <dl class="menu ">
                         <dt class="menu_title"><i class="icon_menu" style="background: url(./img/icon_menu_management.png) no-repeat;">
                             </i>奖品</dt>
                         <dd class="menu_item ">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d3prize.php?token=".$token ?>">
                                 奖品状态</a></dd>
                     </dl>
                     <dl class="menu ">
                         <dt class="menu_title">
                                 <i class="icon_menu" style="background: url(./img/icon_menu_ad.png) no-repeat;">
-                                </i>说明</a> </dt>
+                                </i>说明</dt>
                         <dd class="menu_item ">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d4instruction.php?token=".$token ?>">
                                 会计比赛说明</a></dd>
                     </dl>
                 </div>
@@ -81,7 +81,7 @@ require_once "header.html";
                         <div>
                             <ul>
                                 <li>
-                                    <span style="font-weight: bold">http://dabuu.sinaapp.com/index.php?token=oPpghuP3V2Welj0pH63zCq7wNDQw</span>
+                                    <span style="font-weight: bold">http://dabuu.sinaapp.com/index.php?token=<?php echo $token;?></span>
                                 </li>
 
                             </ul>

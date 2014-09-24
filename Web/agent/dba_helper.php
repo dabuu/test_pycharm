@@ -16,8 +16,7 @@ define("LatestID","SELECT @@IDENTITY ;");
 
 //agent info
 define("InsertAgent","INSERT INTO `app_dabuu`.`t_agent` ( `a_nick_name_md5`, `a_nick_name`, `a_pwd`, `a_pwd_sha`) VALUES ('%s','%s','%s','%s')");
-define("InsertAgentDetails","INSERT INTO `app_dabuu`.`t_agent_detail` (`f_agent_id`, `c_name`, `c_province`, `c_city`,
- `agetor_phone`, `agentor_name`, `wx_name`, `wx_pic`, `cmt`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')");
+define("InsertAgentDetails","INSERT INTO `app_dabuu`.`t_agent_detail` (`f_agent_id`, `c_name`, `c_province`, `c_city`, `agentor_phone`, `agentor_name`, `wx_name`, `wx_pic`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')");
 define("GetAgentToken","SELECT `a_nick_name_md5` FROM `t_agent`where `a_nick_name`= '%s' and `a_pwd` =  '%s'");
 define("GetAgentDBID","SELECT `agent_id` FROM `t_agent`where `a_nick_name_md5`= '%s'");
 define("GetAgentName","SELECT `a_nick_name` FROM `t_agent`where `a_nick_name_md5`= '%s'");
@@ -53,18 +52,10 @@ class dba_helper {
     }
 
     // 这里的 wx_pic 是一个路径， 先用 InsertPic2SaeStorage 获取
-    public function InsertAgentDetails($token, $c_name, $c_province,$c_city, $agent_no, $agent_name, $wx_name, $wx_pic)
+    public function InsertAgentDetails($agent_id, $c_name, $c_province,$c_city, $agent_no, $agent_name, $wx_name, $wx_pic)
     {
-        if(($db_id = $this->GetAgentDBID($token)) != -1)
-        {
-            $this->mysqli->query(sprintf(InsertAgentDetails, $db_id,$c_name, $c_province, $c_city, $agent_no, $agent_name,$wx_name, $wx_pic));
-
-            return ($this->mysqli->errno == 0);
-        }
-        else
-        {
-            return false;
-        }
+        $this->mysqli->query(sprintf(InsertAgentDetails, $agent_id,$c_name, $c_province, $c_city, $agent_no, $agent_name,$wx_name, $wx_pic));
+        return ($this->mysqli->errno == 0);
     }
 
     public function GetDupAgentName($name)
@@ -78,7 +69,7 @@ class dba_helper {
         $rst = $this->mysqli->query(sprintf(GetAgentToken, $name,$pwd));
         if($rst->num_rows)
         {
-            $temp_row = $rst->fetch_assoc();
+            $temp_row = $rst->fetch_array();
             $rst->free();
             return $temp_row[0];
         }
@@ -116,7 +107,7 @@ class dba_helper {
         {
             $tmp_value = $rst->fetch_array();
             $rst->free();
-            return $tmp_value;
+            return $tmp_value[0];
         }
         else
         {

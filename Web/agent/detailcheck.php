@@ -28,17 +28,18 @@ if(isset($_POST['name']))
         $wx_name = trim($_POST['wx_id']);
         //todo: check $token is valid or not
         $mysql = new dba_helper();
-        if($mysql->GetAgentDBID($token) != -1)
+        $agent_id = $mysql->GetAgentDBID($token);
+        if($agent_id != -1)
         {
-            if(!empty($c_name) && !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
+            if(!empty($c_name) && strcmp($c_province,"省份") != 0 && strcmp($c_city,"地级市") !=0 &&
                 !empty($phone) &&!empty($charger) &&!empty($wx_name) && !empty($_FILES['wx_pic']))
             {
                 // step1: upload image and return NOT null path
-                $file_path = dba_helper::InsertPic2SaeStorage($token."png",$_FILES['wx_pic']);
+                $file_path = dba_helper::InsertPic2SaeStorage($token.".png",$_FILES['wx_pic']);
                 if($file_path)
                 {
                     // step2: update DB data;
-                    if($mysql ->InsertAgentDetails($token, $c_name,$c_province,$c_city, $phone, $charger, $wx_name,$file_path))
+                    if($mysql ->InsertAgentDetails($agent_id, $c_name,$c_province,$c_city, $phone, $charger, $wx_name,$file_path))
                     {
                         $response['content'] = "保存完成!";
                         $response['status'] = true;
@@ -54,7 +55,7 @@ if(isset($_POST['name']))
             }
             else
             {
-                $response['content'] = "请填写完整信息!".$c_name.$c_province.$c_city.$phone.$charger.$wx_name.$_FILES['wx_pic']['name'];
+                $response['content'] = "请填写完整信息!";//.$c_name.$c_province.$c_city.$phone.$charger.$wx_name.$_FILES['wx_pic']['name'];
             }
         }
         else

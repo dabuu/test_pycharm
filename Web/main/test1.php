@@ -12,18 +12,14 @@
 //
 //echo json_encode($test);
 //exit;
-$cc = "aaaa";
-echo !empty($cc);
+$cc = "省份aaa";
 
-if(!empty($c_name) && !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&
-    !empty($phone) &&!empty($charger) &&!empty($wx_name) )
-{
-    echo 1;
-}
-else
-{
-    echo 0;
-}
+$response['content'] = sprintf("INSERT INTO `app_dabuu`.`t_agent_detail`
+(`f_agent_id`, `c_name`, `c_province`, `c_city`, `agetor_phone`, `agentor_name`, `wx_name`, `wx_pic`)
+VALUES
+('%s','%s','%s','%s','%s','%s','%s','%s')", $agent_id,$c_name, $c_province, $c_city, $agent_no, $agent_name,$wx_name, $file_path);
+
+echo strcmp($cc,"省份");
 exit;
 //
 //&& !strcmp($c_province,"省份") && !strcmp($c_city,"地级市") &&

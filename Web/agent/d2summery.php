@@ -14,20 +14,20 @@
 $page_title = "微信会计答题配置|统计平台";
 require_once "header.html";
 
-//require_once "dba_helper.php";
-//$mysql = new dba_helper();
-//if(isset($_GET['token']) && !empty($_GET['token']))
-//{
-//    if($mysql->GetAgentDBID($_GET['token']) == -1)
-//    {
-//        header("Location: home.html");
-//    }
-//}
-//else
-//{
-//    header("Location: home.html");
-//}
-//$token = $_GET['token'];
+require_once "dba_helper.php";
+$mysql = new dba_helper();
+if(isset($_GET['token']) && !empty($_GET['token']))
+{
+    if($mysql->GetAgentDBID($_GET['token']) == -1)
+    {
+        header("Location: home.html");
+    }
+}
+else
+{
+    header("Location: home.html");
+}
+$token = $_GET['token'];
 ?>
     <div class="head" id="header">
         <div class="head_box">
@@ -57,7 +57,7 @@ require_once "header.html";
                         <dt class="menu_title"><i class="icon_menu" style="background: url(./img/icon_menu_setup.png) no-repeat;">
                             </i>配置</dt>
                         <dd class="menu_item">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d1setting.php?token=".$token ?>">
                             配置服务器说明</a></dd>
                     </dl>
                     <dl class="menu ">
@@ -70,15 +70,15 @@ require_once "header.html";
                         <dt class="menu_title"><i class="icon_menu" style="background: url(./img/icon_menu_management.png) no-repeat;">
                             </i>奖品</dt>
                         <dd class="menu_item ">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d3prize.php?token=".$token ?>">
                                 奖品状态</a></dd>
                     </dl>
                     <dl class="menu ">
                         <dt class="menu_title">
                             <i class="icon_menu" style="background: url(./img/icon_menu_ad.png) no-repeat;">
-                            </i>说明</a> </dt>
+                            </i>说明 </dt>
                         <dd class="menu_item ">
-                            <a href="<?php echo "summery page link? uid=" ?>">
+                            <a href="<?php echo "d4instruction.php?token=".$token ?>">
                                 会计比赛说明</a></dd>
                     </dl>
                 </div>
@@ -92,7 +92,7 @@ require_once "header.html";
                     <ul class="mp_news_list">
                         <li class="mp_news_item">
                             <div style="width: 100%; margin-top: 20px;" align="center">
-                                <table id="summery" style="border-collapse: collapse;border: none;">
+                                <table id="summery" style="border-collapse: collapse;border: none; text-align: center;width:100%;">
                                     <tr>
                                         <th>日期</th><th>总用户数</th><th>昨日新增用户数</th><th>当天答题数量</th><th>当天答题正确率</th>
                                     </tr>
@@ -110,7 +110,16 @@ require_once "header.html";
                                         for ($i=0; $i<7; $i++)
                                         {
                                             $tmp_date = date("Y-m-d", strtotime($i." days ago"));
-                                            echo "<tr><td>".$tmp_date."8</td><td>".$total_user_count."</td>";
+                                            if($i%2 == 0)
+                                            {
+                                                echo "<tr class='odd'>";
+                                            }
+                                            else
+                                            {
+                                                echo "<tr class='even'>";
+                                            }
+
+                                            echo "<td>".$tmp_date."</td><td>".$total_user_count."</td>";
                                             $total_user_count = $total_user_count-$daily_user_array[$tmp_date];
                                             if(array_key_exists($tmp_date, $daily_user_array))
                                             {
