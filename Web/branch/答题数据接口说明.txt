@@ -1,4 +1,13 @@
-﻿答题页面的url : question.html?aid=xxxxx&uid=wx_open_id
+﻿
+答题， 未关注
+http://2.dabuu.sinaapp.com/getquestions.php?aid=18e6255ebbf2d72f64625c63f29c600d&uid=o123127fsdouvpz
+http://2.dabuu.sinaapp.com/getresult.php?aid=18e6255ebbf2d72f64625c63f29c600d&uid=o123127fsdouvpz
+
+未答题， 已关注
+http://2.dabuu.sinaapp.com/getquestions.php?aid=18e6255ebbf2d72f64625c63f29c600d&uid=oPpghuGYJAi8c1iyp0-y9GaU1wM0
+http://2.dabuu.sinaapp.com/getresult.php?aid=18e6255ebbf2d72f64625c63f29c600d&uid=oPpghuGYJAi8c1iyp0-y9GaU1wM0
+
+答题页面的url : question.html?aid=xxxxx&uid=wx_open_id
 
 ============================  获取题目 getquestioninfo.json?agent=xxxx&token=wx_open_id  ============================
 {

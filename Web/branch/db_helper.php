@@ -18,13 +18,13 @@ define("LatestID","SELECT @@IDENTITY ;");
 /*
  *  User Operation in DB
  */
-define("UserDBIdByWXId","SELECT `usr_id` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
+define("UserDBIdByWXId","SELECT `usr_id`,`focus_on_sf` FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
 define("FocusSFInfoUserWXId","SELECT `usr_id`,`focus_on_sf`  FROM `app_dabuu`.`t_user` WHERE `usr_wx_id` = '%s'");
 define("SetUserFocusOnStatus", "update `t_user` set `focus_on_sf`= %s where `usr_id` = %s ");
 define("HasFocusOnSF", "SELECT `focus_on_sf` FROM `t_user` where `usr_id` = %d;");
 define("InsertUserWXId","INSERT INTO `app_dabuu`.`t_user` (`usr_wx_id`, `user_wx_sha_id`, `focus_on_sf`,`f_agent_id`) VALUES ('%s', '%s','%s','%s');");
 define("HasAnswerQuestionsTodayByUserID","SELECT count(*) FROM `t_results`WHERE DATE(`answer_time`) = DATE(NOW()) AND `f_user_id` = %d;");
-
+define("GetUserAgentTokenByUserID", "SELECT `t_agent`.`a_nick_name_md5` FROM `t_user` join `t_agent` on `t_user`.`f_agent_id` = `t_agent`.`agent_id`where `t_user`.`usr_id`=%s");
 
 /*
  *  Questions Operation in DB
@@ -35,7 +35,7 @@ WHERE DATE(`t_questions_today`.`qt_date`) = DATE(now()) ");
 define("GenerateTodayQuestions_TPL","INSERT INTO `app_dabuu`.`t_questions_today` (`f_question_id`) VALUES %s;"); // here %s could be "(2),(3),(4)"
 define("InsertUserAnswer","INSERT INTO `app_dabuu`.`t_results` (`f_qt_id` ,`f_user_id` ,`rst_value`,`rst_iscorrect`,`rate`) VALUES %s;"); // here %s could be (%d, %d,%d),(%d, %d,%d)
 define("SelectQuestionExplainByIDs", "SELECT `t_questions_today`.`qt_id`, `t_questions`.`q_answer_id`, `t_questions`.`q_explain` FROM `t_questions_today` left join `t_questions` on `t_questions`.`q_id` = `t_questions_today`.`f_question_id` where `t_questions_today`.`qt_id` in (%s))");
-define("SelectUserCorrectCountToday", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and DATE(`answer_time`) = DATE(now()) and `rst_iscorrect` = 1");
+define("SelectUserCorrectCountToday", "SELECT count(*),`rate` FROM `t_results` where `f_user_id` = %s and DATE(`answer_time`) = DATE(now()) and `rst_iscorrect` = 1");
 define("SelectUserCorrectCountHistory", "SELECT count(*) FROM `t_results` where `f_user_id` = %s and `rst_iscorrect` = 1");
 // user operation query
 class db_helper {
@@ -49,6 +49,19 @@ class db_helper {
     /*
      *  User Operation in DB
      */
+    function GetAgentTokenByUserID($user_db_id)
+    {
+        $rst = $this->mysqli->query(sprintf(GetUserAgentTokenByUserID,$user_db_id));
+        if($rst->num_rows != 0)
+        {
+            $temp_value = $rst->fetch_array();
+            $rst->free();
+            return $temp_value[0];
+        }
+
+        return -1;
+    }
+
     function HasAnswerQuestionToday($u_db_id)
     {
         $rst_user_answer_count = $this->mysqli->query(sprintf(HasAnswerQuestionsTodayByUserID,$u_db_id));
@@ -70,7 +83,18 @@ class db_helper {
             return -1;
         }
     }
-
+    function HasFocusOnSFByWXID($u_wx_id)
+    {
+        $user_info = array();
+        $rst_user_focus_status = $this->mysqli->query(sprintf(FocusSFInfoUserWXId,$u_wx_id));
+        if($rst_user_focus_status->num_rows)
+        {
+            $user_focus_status = $rst_user_focus_status->fetch_array();
+            $user_info['user_id'] = $user_focus_status[0];
+            $user_info['focus'] = $user_focus_status[1];
+        }
+        return $user_info;
+    }
     function SelectQuestionsInfoByIDs($question_ids)
     {
         $query_result = $this->mysqli->query(sprintf(SelectQuestionExplainByIDs, $question_ids));
@@ -126,7 +150,8 @@ class db_helper {
             if($temp_id == 0) // check if user is focus on SF;  `focus_on_sf` = 0 is NOT focus on
             {
                 $this->mysqli->query(sprintf(SetUserFocusOnStatus,1, $result_temp_id[0]));//  $result_temp_id[0] is `usr_id`, update user's status
-                return true;
+
+                return ($this->mysqli->errno == 0);
             }
         }
         else{ // if user is not in DB, he is a new user for SF by himself
@@ -153,21 +178,21 @@ class db_helper {
 
     function QueryUserID($user_wx_id,$f_agent_id)
     {
+        $user_info = array();
         $result = $this->mysqli->query(sprintf(UserDBIdByWXId, $user_wx_id));
         if($result->num_rows)
         {
             $result_temp_id = $result->fetch_array();
-            $temp_id = $result_temp_id[0];
-            if(is_numeric($temp_id))
-            {
-                $result->free();
-                return $temp_id;
-            }
-            else{
-                //todo: log to warning;
-            }
+
+            $user_info['user_id'] = $result_temp_id[0];
+            $user_info['focus'] = $result_temp_id[1];
         }
-        return  $this->InsertUser($user_wx_id, 0,$f_agent_id);
+        else
+        {
+            $user_info['focus'] = 0;
+            $user_info['user_id'] = $this->InsertUser($user_wx_id, 0,$f_agent_id);
+        }
+        return $user_info ;
     }
     private function InsertUser($user_wx_id, $focus_on,$f_agent_id)
     {
@@ -246,12 +271,15 @@ class db_helper {
         return $this->mysqli->errno;
     }
 
-    function GetUserTodayCorrectNum($user_db_id)
+    function GetUserTodayCorrectInfo($user_db_id)
     {
         $query_rst = $this->mysqli->query(sprintf(SelectUserCorrectCountToday, $user_db_id));
         $count_rst = $query_rst->fetch_array();
         $query_rst->free();
-        return $count_rst[0];
+        $today_info = array();
+        $today_info['today'] =$count_rst[0];
+        $today_info['rate'] =$count_rst[1];
+        return $today_info;
     }
 
     function GetUserHistoryCorrectNum($user_db_id)

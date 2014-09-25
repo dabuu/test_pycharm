@@ -109,15 +109,16 @@ class wechatCallbackapiTest
     private  function  receiveText($object)
     {
         $keyword = trim($object->Content);
-        if($keyword == "答题" || $keyword == "1" || $keyword == "question")
+        if($keyword == "答题" || $keyword == "1" || $keyword == "q")
         {
             $result = $this->transmitNews($object);
-            return $result;
+
         }
         else
         {
-            return "123";
+            $result = $this->transmitText($object,"谢谢关注" );
         }
+        return $result;
     }
     private function transmitNews($object)
     {
